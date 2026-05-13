@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Banco de misiones — dixipixie8</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:sans-serif;padding:14px;background:#fff;color:#1a1a1a;font-size:14px}
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px}
+.top-title{font-size:17px;font-weight:500}
+.top-sub{font-size:11px;color:#888;margin-top:2px}
+.xp-pill{background:#EEEDFE;border-radius:20px;padding:4px 12px;font-size:12px;font-weight:500;color:#3C3489;white-space:nowrap;flex-shrink:0}
+.group-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
+.gtab{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:1.5px solid #ddd;background:transparent;color:#666;transition:all 0.15s;white-space:nowrap}
+.gtab.active{color:white;border-color:transparent}
+.cat-section{margin-bottom:16px}
+.cat-header{display:flex;align-items:center;gap:8px;padding:9px 13px;border-radius:8px;margin-bottom:7px}
+.cat-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.cat-name{font-size:13px;font-weight:500;flex:1}
+.cat-badge{font-size:10px;font-weight:500;padding:2px 8px;border-radius:6px}
+.cat-note{font-size:11px;color:#888;font-style:italic;margin-left:4px}
+.missions-list{display:flex;flex-direction:column;gap:5px}
+.mc{background:#fff;border:0.5px solid #e0e0e0;border-radius:8px;padding:10px 13px;display:flex;align-items:flex-start;gap:10px;position:relative;overflow:hidden}
+.mc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.mc.daily::before{background:#7F77DD}
+.mc.weekly::before{background:#1D9E75}
+.mc.quest::before{background:#EF9F27}
+.mb{flex:1;min-width:0}
+.mt{font-size:12px;font-weight:500;color:#1a1a1a;line-height:1.3}
+.md{font-size:11px;color:#888;margin-top:3px;line-height:1.4}
+.mm{display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap}
+.tag{font-size:10px;font-weight:500;padding:1px 7px;border-radius:6px;white-space:nowrap}
+.td{background:#EEEDFE;color:#3C3489}
+.tw{background:#E1F5EE;color:#085041}
+.tq{background:#FAEEDA;color:#412402}
+.cross{background:#F1EFE8;color:#444441}
+.mxp{font-size:10px;color:#aaa;font-weight:500}
+.add-btn{font-size:10px;padding:3px 9px;border-radius:6px;border:0.5px solid #ccc;background:transparent;color:#666;cursor:pointer;margin-left:auto;white-space:nowrap;transition:all 0.12s;flex-shrink:0}
+.add-btn:hover{background:#E1F5EE;border-color:#1D9E75;color:#085041}
+.add-btn.on{background:#E1F5EE;border-color:#1D9E75;color:#085041}
+.infra-section{background:#F1EFE8;border-radius:10px;padding:13px 15px;margin-bottom:16px;border:0.5px solid #D3D1C7}
+.infra-title{font-size:12px;font-weight:500;color:#444441;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em}
+.infra-item{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:0.5px solid #D3D1C7}
+.infra-item:last-child{border-bottom:none}
+.summary{background:#fff;border:0.5px solid #ddd;border-radius:10px;padding:11px 15px;display:flex;align-items:center;gap:12px;margin-top:12px;position:sticky;bottom:0}
+.sc{font-size:14px;font-weight:500}
+.sx{font-size:11px;color:#888;margin-top:1px}
+.sb{padding:7px 14px;border-radius:8px;background:#7F77DD;color:white;border:none;font-size:12px;font-weight:500;cursor:pointer;margin-left:auto;white-space:nowrap}
+.sb:hover{opacity:0.85}
+.alert-box{background:#FCEBEB;border-radius:8px;padding:8px 12px;font-size:11px;color:#791F1F;margin-bottom:12px;line-height:1.5}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <div class="top-title">Banco de misiones — dixipixie8</div>
+    <div class="top-sub">11 categorías · actividades reales del cuaderno</div>
+  </div>
+  <div class="xp-pill" id="pill">0 misiones · 0 XP</div>
+</div>
+
+<div class="alert-box">⚠ Contexto: en reacondicionamiento post-cirugía (hernia umbilical, feb 2025). Las misiones de Disciplina física arrancan suave y escalan progresivamente.</div>
+
+<div class="group-tabs" id="tabs"></div>
+
+<div class="infra-section" id="infra-sec">
+  <div class="infra-title">Quests de infraestructura — base del sistema</div>
+  <div class="infra-item">
+    <div style="flex:1">
+      <div style="font-size:12px;font-weight:500">Gestión de smartphone y RRSS</div>
+      <div style="font-size:11px;color:#888;margin-top:2px">Configurar límites, apps de control, protocolo de uso. Hace todo el sistema más fácil.</div>
+    </div>
+    <span class="tag tq" style="flex-shrink:0">Quest · +60 XP</span>
+  </div>
+  <div class="infra-item">
+    <div style="flex:1">
+      <div style="font-size:12px;font-weight:500">Poképerfil del puesto de trabajo</div>
+      <div style="font-size:11px;color:#888;margin-top:2px">Mapear el rol actual antes de que cambie. Base para el portafolio pre-retiro.</div>
+    </div>
+    <span class="tag tq" style="flex-shrink:0">Quest · +40 XP</span>
+  </div>
+  <div class="infra-item">
+    <div style="flex:1">
+      <div style="font-size:12px;font-weight:500">Reunión de pauta mensual (economía)</div>
+      <div style="font-size:11px;color:#888;margin-top:2px">Revisión financiera mensual como ritual fijo. Sin esto, la economía sigue en modo emergencia.</div>
+    </div>
+    <span class="tag tw" style="flex-shrink:0">Mensual · +50 XP</span>
+  </div>
+</div>
+
+<div id="container"></div>
+
+<div class="summary">
+  <div>
+    <div class="sc" id="sc">0 misiones activas</div>
+    <div class="sx" id="sx">0 XP potencial semanal</div>
+  </div>
+  <button class="sb" onclick="verSeleccion()">Ver mi selección</button>
+</div>
+
+<script>
+const CATS = [
+  {
+    id:'dis_fis', name:'Disciplina física', group:'cuerpo', color:'#1D9E75', light:'#E1F5EE', dark:'#085041', score:40,
+    note:'reacondicionamiento post-cirugía',
+    missions:[
+      {t:'Salsa y bachata',           d:'Clase lunes 20:30. Prioridad alta — ya está agendada.',                          type:'weekly', xp:20},
+      {t:'Sentadillas matutinas',     d:'50 sentadillas al despertar. Construir la racha diaria desde ya.',               type:'daily',  xp:10},
+      {t:'Entrenamiento peso corporal', d:'Sesión suave de pesas livianas durante mayo. Sin exigirse de más.',            type:'weekly', xp:20},
+      {t:'Entrenamiento matutino',    d:'Implementar bloque de movimiento en la mañana como ritual fijo.',               type:'daily',  xp:15},
+      {t:'Evaluar retomar karate/BJJ',d:'Quest: ir a observar una clase y decidir si es el momento post-cirugía.',       type:'quest',  xp:30},
+      {t:'Evaluar danza contemporánea',d:'Quest: buscar opciones, consultar disponibilidad y costo.',                    type:'quest',  xp:20},
+      {t:'Evaluar breakdance',        d:'Quest: buscar clases y evaluar si el cuerpo está listo.',                       type:'quest',  xp:20},
+    ]
+  },
+  {
+    id:'salud', name:'Salud & Cuerpo', group:'cuerpo', color:'#1D9E75', light:'#E1F5EE', dark:'#085041', score:25,
+    note:'zona crítica · 8 ítems médicos pendientes',
+    abandoned:true,
+    missions:[
+      {t:'Higiene del sueño',         d:'Hora fija de acostarse + sin pantallas 30 min antes. Base de todo.',            type:'daily',  xp:15},
+      {t:'Suplementación diaria',     d:'Omega-3, vitamina C, magnesio. Dejarlo preparado la noche anterior.',           type:'daily',  xp:5},
+      {t:'Ayuno intermitente',        d:'Implementar ventana de ayuno (ej. 16:8). Consistencia sobre perfección.',       type:'daily',  xp:10},
+      {t:'Agendar evaluación de pisada', d:'Un turno. Una llamada. Esta semana.',                                        type:'quest',  xp:20},
+      {t:'Agendar evaluación cuello', d:'Definir si ecografía, resonancia o fonoaudiólogo primero.',                     type:'quest',  xp:20},
+      {t:'Control de colesterol',     d:'Agendar examen de sangre con perfil lipídico.',                                 type:'quest',  xp:20},
+      {t:'Ecografía pelviana',        d:'Agendar. Pendiente de la cirugía.',                                             type:'quest',  xp:20},
+      {t:'Evaluación otorrino',       d:'Agendar. Llevas tiempo con esto pendiente.',                                    type:'quest',  xp:20},
+      {t:'Psicólogo / sexólogo',      d:'Iniciar proceso terapéutico. Primera consulta como quest de arranque.',         type:'quest',  xp:50, cross:'Sexoafectivo'},
+      {t:'Minuta nutricional',        d:'Consulta con nutricionista para subir proteínas y estructurar alimentación.',   type:'quest',  xp:40},
+    ]
+  },
+  {
+    id:'dis_int', name:'Disciplina intelectual', group:'mente', color:'#7F77DD', light:'#EEEDFE', dark:'#3C3489', score:78,
+    missions:[
+      {t:'Leer 30 min diarios',       d:'Libro mensual en curso. Sin scroll, sin multitarea.',                           type:'daily',  xp:10},
+      {t:'Escribir ensayo o reflexión',d:'Avanzar en producción escrita propia. Aunque sea un párrafo.',                type:'weekly', xp:20},
+      {t:'Investigación sobre el Juego', d:'Avanzar en la línea teórica. Registrar en cuaderno de investigación.',      type:'weekly', xp:25, cross:'Juego'},
+      {t:'Módulo RRSS y smartphone',  d:'Avanzar en el estudio teórico sobre uso responsable de tecnología.',           type:'weekly', xp:20},
+      {t:'Terminar libro del mes',    d:'Completar la lectura mensual de principio a fin.',                              type:'quest',  xp:40},
+      {t:'Terminar un ensayo',        d:'Llevar un ensayo desde borrador hasta versión terminada.',                      type:'quest',  xp:60},
+    ]
+  },
+  {
+    id:'trabajo', name:'Trabajo', group:'mente', color:'#7F77DD', light:'#EEEDFE', dark:'#3C3489', score:85,
+    note:'situación laboral delicada · horizonte de retiro',
+    missions:[
+      {t:'Bloque de trabajo profundo', d:'2-3 horas sin interrupciones en tarea principal. Celular en otra habitación.', type:'daily',  xp:20},
+      {t:'Avanzar línea investigación docencia clínica', d:'Sesión de trabajo en el plan de investigación.',            type:'weekly', xp:25},
+      {t:'Formación bioestadística',  d:'Sesión de estudio o práctica de bioestadística / REDCap.',                     type:'weekly', xp:20},
+      {t:'Avanzar Diplomado UDP',     d:'Dedicar bloque de tiempo al proyecto del diplomado.',                          type:'weekly', xp:25},
+      {t:'Avanzar base de análisis R', d:'Trabajar en la plataforma propia de análisis estadístico.',                   type:'weekly', xp:25},
+      {t:'Avanzar tutoría clínica',   d:'Trabajo concreto en el proyecto de tutoría.',                                  type:'weekly', xp:20},
+      {t:'FENPRUSS — participación activa', d:'Asistir, preparar o contribuir a actividad sindical.',                   type:'weekly', xp:15},
+      {t:'Reclamar autoría pendiente', d:'Gestionar documentación de autoría en publicaciones o trabajos.',             type:'quest',  xp:50},
+      {t:'Certificación REDCap',      d:'Completar proceso de certificación.',                                          type:'quest',  xp:60},
+      {t:'Portafolio pre-retiro',     d:'Documentar competencias, certificaciones y trabajo realizado.',                type:'quest',  xp:80},
+      {t:'Plan de desarrollo profesional', d:'Definir hoja de ruta considerando el horizonte de retiro.',              type:'quest',  xp:70},
+    ]
+  },
+  {
+    id:'politica', name:'Política', group:'mente', color:'#7F77DD', light:'#EEEDFE', dark:'#3C3489', score:60,
+    missions:[
+      {t:'Lectura política de fondo',  d:'Artículo largo, ensayo o capítulo. No titulares, no Twitter.',               type:'weekly', xp:15},
+      {t:'Estudio Marxismo 2026',      d:'Avanzar en formación teórica marxista. Sesión de lectura o discusión.',       type:'weekly', xp:20},
+      {t:'Estudio Estatuto Administrativo', d:'Conocer los propios derechos laborales. Sesión de lectura.',            type:'weekly', xp:20},
+      {t:'Teoría del Estado / Trabajo', d:'Avanzar en formación teórica política.',                                     type:'weekly', xp:20},
+      {t:'Divulgación política',       d:'Publicar, compartir o comunicar algo con perspectiva política.',              type:'weekly', xp:15},
+      {t:'Acción anti reforma tributaria', d:'Contribuir activamente a la campaña contra la reforma de Kast.',         type:'weekly', xp:20},
+      {t:'Mapa de flujo grupos de influencia', d:'Quest: construir el mapa de actores políticos con perspectiva de red.',type:'quest', xp:70},
+      {t:'Estudio instituciones chilenas', d:'Quest: mapear instituciones clave del Estado chileno.',                   type:'quest',  xp:60},
+      {t:'La UP, el Golpe y la dictadura', d:'Quest: recorrer el material básico infaltable de forma sistemática.',    type:'quest',  xp:50},
+    ]
+  },
+  {
+    id:'familia', name:'Familia', group:'vinculo', color:'#D4537E', light:'#FBEAF0', dark:'#72243E', score:52,
+    missions:[
+      {t:'Visita hermano menor y papás', d:'Retomar regularidad. Calendarizar visita concreta.',                        type:'weekly', xp:20},
+      {t:'Visitar padrinos',           d:'Visita pendiente. Calendarizar.',                                             type:'quest',  xp:25},
+      {t:'Pensión papás y sobrinos',   d:'Gestionar o revisar el estado de la pensión familiar.',                      type:'weekly', xp:20},
+      {t:'Situación legal hermano mayor', d:'Quest: avanzar en la gestión legal pendiente.',                           type:'quest',  xp:40},
+    ]
+  },
+  {
+    id:'amigos', name:'Amigos', group:'vinculo', color:'#D4537E', light:'#FBEAF0', dark:'#72243E', score:48,
+    missions:[
+      {t:'Pichanga con Ale',           d:'Fin de semana del 21 de mayo. Ya está — confirmar y no cancelar.',            type:'quest',  xp:20},
+      {t:'Calendarizar visitas',       d:'Agendar encuentros concretos con amigos. No "hay que juntarse".',             type:'weekly', xp:15},
+      {t:'Comunicación activa',        d:'Escribir o llamar a alguien sin esperar que te contacten primero.',           type:'weekly', xp:10},
+      {t:'Podcast Pampoa',             d:'Avanzar en el proyecto del podcast — planificar, grabar o editar.',           type:'weekly', xp:25, cross:'Creación'},
+      {t:'Plan de regularidad con amigos', d:'Quest: definir estructura de actividades regulares con el grupo.',        type:'quest',  xp:40},
+      {t:'Equipos de acción',          d:'Quest: organizar o participar en equipo de acción colectiva con amigos.',    type:'quest',  xp:40},
+    ]
+  },
+  {
+    id:'sexoafect', name:'Desarrollo sexoafectivo', group:'vinculo', color:'#D4537E', light:'#FBEAF0', dark:'#72243E', score:22,
+    abandoned:true,
+    missions:[
+      {t:'Terapia — sesión regular',   d:'Asistir a sesión con psicólogo sexólogo. Misión central de esta categoría.',  type:'weekly', xp:30, cross:'Salud'},
+      {t:'Outfits — construir estilo', d:'Explorar, comprar o armar un look que refleje cómo quieres verte.',           type:'weekly', xp:20},
+      {t:'Sesión de belleza',          d:'Autocuidado estético: corte, skincare, lo que necesites.',                    type:'weekly', xp:15},
+      {t:'Iniciar experimentación',    d:'Quest abierta: dar un paso concreto en lo que estás explorando.',             type:'quest',  xp:60},
+    ]
+  },
+  {
+    id:'juego', name:'Juego', group:'creacion', color:'#EF9F27', light:'#FAEEDA', dark:'#633806', score:55,
+    missions:[
+      {t:'OP TCG',                     d:'Sesión de juego o colección. Tiempo de juego libre sin culpa.',               type:'daily',  xp:5},
+      {t:'Pokémon TCG Pocket',         d:'Partida o gestión del mazo. Tiempo de juego.',                               type:'daily',  xp:5},
+      {t:'Clash Royale',               d:'Partida. Vale como descanso activo.',                                         type:'daily',  xp:5},
+      {t:'Smash Bros',                 d:'Partida o torneo. Juego social y competitivo.',                              type:'weekly', xp:10},
+      {t:'Investigación teórica sobre el Juego', d:'Conectar la práctica lúdica con la línea de investigación.',       type:'weekly', xp:20, cross:'Dis. intelectual'},
+    ]
+  },
+  {
+    id:'arte', name:'Arte', group:'creacion', color:'#EF9F27', light:'#FAEEDA', dark:'#633806', score:38,
+    missions:[
+      {t:'Repertorio guitarra',        d:'Practicar guitarra. Aunque sea 15 minutos. Lo que importa es abrir el estuche.', type:'daily', xp:10},
+      {t:'Retomar stencils',           d:'Trabajar en un stencil: diseñar, cortar o aplicar.',                         type:'weekly', xp:20},
+      {t:'Visitar museo',              d:'Ir a una exposición. Calendarizar con anticipación.',                         type:'weekly', xp:20},
+      {t:'Cine',                       d:'Ver una película en sala. No en casa, en sala.',                             type:'weekly', xp:15},
+      {t:'Teatro',                     d:'Ver una obra. Buscar cartelera y agendar.',                                   type:'weekly', xp:20},
+      {t:'Concierto',                  d:'Asistir a un concierto. Puede ser chico o grande.',                           type:'weekly', xp:20},
+    ]
+  },
+  {
+    id:'economia', name:'Economía doméstica', group:'recursos', color:'#E24B4A', light:'#FCEBEB', dark:'#791F1F', score:20,
+    abandoned:true,
+    missions:[
+      {t:'Registro de gastos del día', d:'Anotar qué gastaste hoy. 5 minutos. Sin juzgar.',                             type:'daily',  xp:10},
+      {t:'Revisión semanal de finanzas', d:'30 min: ingresos, egresos, estado vs semana pasada.',                      type:'weekly', xp:30},
+      {t:'Regularizar situación financiera', d:'Quest: enfrentar deudas, ahorro e inversiones de frente.',             type:'quest',  xp:70},
+      {t:'Búsqueda casa propia Puente Alto', d:'Sesión de búsqueda activa: portales, requisitos, opciones.',           type:'weekly', xp:25},
+      {t:'Plan de ahorro modo serio',  d:'Quest: definir meta, monto mensual y mecanismo de ahorro.',                  type:'quest',  xp:60},
+      {t:'Acreditar ejercicio profesional', d:'Quest: gestionar documentación para aumentar renta.',                   type:'quest',  xp:50},
+      {t:'Deberes domésticos automatizados', d:'Quest: crear sistema para que las tareas del hogar no dependan de energía.', type:'quest', xp:40},
+    ]
+  },
+];
+
+const GROUPS_META = [
+  {id:'all',    name:'Todas',    color:'#7F77DD'},
+  {id:'cuerpo', name:'Cuerpo',   color:'#1D9E75'},
+  {id:'mente',  name:'Mente',    color:'#7F77DD'},
+  {id:'vinculo',name:'Vínculo',  color:'#D4537E'},
+  {id:'creacion',name:'Creación',color:'#EF9F27'},
+  {id:'recursos',name:'Recursos',color:'#E24B4A'},
+];
+
+let selected = new Set();
+let activeGroup = 'all';
+
+function buildTabs(){
+  const tabs = document.getElementById('tabs');
+  GROUPS_META.forEach(g=>{
+    const btn = document.createElement('button');
+    btn.className = 'gtab' + (g.id==='all'?' active':'');
+    btn.textContent = g.name;
+    if(g.id==='all'){btn.style.background='#7F77DD';btn.style.color='white';btn.style.borderColor='#7F77DD';}
+    btn.onclick = ()=>filter(g.id, btn);
+    tabs.appendChild(btn);
+  });
+}
+
+function filter(gid, btn){
+  activeGroup = gid;
+  document.querySelectorAll('.gtab').forEach(b=>{
+    b.classList.remove('active');
+    b.style.background=''; b.style.color=''; b.style.borderColor='';
+  });
+  btn.classList.add('active');
+  const color = GROUPS_META.find(g=>g.id===gid)?.color||'#7F77DD';
+  btn.style.background=color; btn.style.color='white'; btn.style.borderColor=color;
+  document.getElementById('infra-sec').style.display = gid==='all'?'':'none';
+  render();
+}
+
+function render(){
+  const cont = document.getElementById('container');
+  cont.innerHTML = '';
+  const cats = activeGroup==='all' ? CATS : CATS.filter(c=>c.group===activeGroup);
+  cats.forEach(cat=>{
+    const sec = document.createElement('div');
+    sec.className = 'cat-section';
+    const hdr = document.createElement('div');
+    hdr.className = 'cat-header';
+    hdr.style.background = cat.abandoned ? '#FCEBEB' : cat.light;
+    hdr.innerHTML = `
+      <div class="cat-dot" style="background:${cat.abandoned?'#E24B4A':cat.color}"></div>
+      <div class="cat-name">${cat.name}${cat.note?`<span class="cat-note">— ${cat.note}</span>`:''}</div>
+      <span class="cat-badge" style="background:${cat.abandoned?'#FCEBEB':cat.light};color:${cat.abandoned?'#791F1F':cat.dark}">${cat.score}/100${cat.abandoned?' ⚠':''}</span>
+    `;
+    sec.appendChild(hdr);
+
+    const list = document.createElement('div');
+    list.className = 'missions-list';
+
+    cat.missions.forEach(m=>{
+      const key = cat.id+'::'+m.t;
+      const on = selected.has(key);
+      const card = document.createElement('div');
+      card.className = `mc ${m.type}`;
+      const tagLabel = {daily:'Diaria',weekly:'Semanal',quest:'Quest'}[m.type];
+      const tagClass = {daily:'td',weekly:'tw',quest:'tq'}[m.type];
+      card.innerHTML = `
+        <div class="mb">
+          <div class="mt">${m.t}</div>
+          <div class="md">${m.d}</div>
+          <div class="mm">
+            <span class="tag ${tagClass}">${tagLabel}</span>
+            <span class="mxp">+${m.xp} XP</span>
+            ${m.cross?`<span class="tag cross">↔ ${m.cross}</span>`:''}
+          </div>
+        </div>
+        <button class="add-btn ${on?'on':''}" data-key="${key}" data-xp="${m.xp}">${on?'✓ activa':'+ activar'}</button>
+      `;
+      card.querySelector('.add-btn').onclick = e=>{
+        e.stopPropagation();
+        const k = e.target.dataset.key;
+        if(selected.has(k)) selected.delete(k);
+        else selected.add(k);
+        updateSummary();
+        render();
+      };
+      list.appendChild(card);
+    });
+
+    sec.appendChild(list);
+    cont.appendChild(sec);
+  });
+}
+
+function updateSummary(){
+  const count = selected.size;
+  let xp = 0;
+  selected.forEach(key=>{
+    const [catId, title] = key.split('::');
+    const cat = CATS.find(c=>c.id===catId);
+    const m = cat?.missions.find(x=>x.t===title);
+    if(m) xp += m.xp;
+  });
+  document.getElementById('sc').textContent = count+' misiones activas';
+  document.getElementById('sx').textContent = xp+' XP potencial semanal';
+  document.getElementById('pill').textContent = count+' misiones · '+xp+' XP';
+}
+
+function verSeleccion(){
+  if(selected.size===0){alert('No hay misiones seleccionadas todavía.');return;}
+  const lines = ['MISIONES ACTIVAS — dixipixie8',''];
+  CATS.forEach(cat=>{
+    const ms = cat.missions.filter(m=>selected.has(cat.id+'::'+m.t));
+    if(ms.length){
+      lines.push('[ '+cat.name+' ]');
+      ms.forEach(m=>lines.push('  '+m.t+' — '+{daily:'Diaria',weekly:'Semanal',quest:'Quest'}[m.type]+' +'+m.xp+' XP'));
+      lines.push('');
+    }
+  });
+  alert(lines.join('\n'));
+}
+
+buildTabs();
+render();
+updateSummary();
+</script>
+</body>
+</html>

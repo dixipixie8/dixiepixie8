@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dixipixie8 — Sistema de gestión</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:20px}
+.hub{max-width:480px;margin:0 auto}
+
+.header{text-align:center;padding:24px 0 20px}
+.avatar{width:64px;height:64px;border-radius:50%;background:#EEEDFE;border:2px solid #7F77DD;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#3C3489;margin:0 auto 10px;line-height:1.3;text-align:center}
+.name{font-size:20px;font-weight:600;color:#1a1a1a}
+.class{font-size:12px;color:#7F77DD;margin-top:2px}
+.level-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
+.level-pill{background:#EEEDFE;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:500;color:#3C3489}
+.streak{background:#FAEEDA;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:500;color:#412402}
+
+.xp-bar-wrap{background:#e0e0e0;border-radius:4px;height:5px;margin:12px 0 4px;overflow:hidden}
+.xp-bar-fill{height:100%;background:#7F77DD;border-radius:4px;width:46%}
+.xp-label{font-size:11px;color:#888;text-align:center}
+
+.section-label{font-size:10px;font-weight:600;color:#888;letter-spacing:0.08em;text-transform:uppercase;margin:18px 0 8px}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.module-card{background:#fff;border-radius:12px;border:0.5px solid #e0e0e0;padding:16px;cursor:pointer;transition:all 0.15s;text-decoration:none;display:block}
+.module-card:hover{border-color:#7F77DD;transform:translateY(-1px)}
+.module-card.wide{grid-column:1/-1}
+.module-card.critical{border-color:#E24B4A;border-width:1.5px}
+.mc-icon{font-size:24px;margin-bottom:8px}
+.mc-title{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:2px}
+.mc-sub{font-size:11px;color:#888;line-height:1.4}
+.mc-badge{display:inline-block;font-size:9px;font-weight:600;padding:1px 7px;border-radius:6px;margin-top:5px}
+.badge-daily{background:#EEEDFE;color:#3C3489}
+.badge-weekly{background:#E1F5EE;color:#085041}
+.badge-alert{background:#FCEBEB;color:#791F1F}
+.badge-new{background:#FAEEDA;color:#412402}
+
+.stats-mini{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:8px}
+.stat-m{background:#fff;border-radius:8px;padding:7px 4px;text-align:center;border:0.5px solid #e0e0e0}
+.stat-m-val{font-size:14px;font-weight:600}
+.stat-m-bar{height:3px;border-radius:2px;margin:3px auto 2px;width:80%}
+.stat-m-bar-fill{height:100%;border-radius:2px}
+.stat-m-name{font-size:9px;color:#888}
+
+.day-card{background:#7F77DD;border-radius:12px;padding:14px 16px;color:white;margin-bottom:8px}
+.day-title{font-size:11px;font-weight:600;opacity:0.8;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px}
+.day-name{font-size:18px;font-weight:600}
+.day-sub{font-size:11px;opacity:0.75;margin-top:2px}
+
+.footer{text-align:center;margin-top:20px;font-size:10px;color:#bbb;padding-bottom:10px}
+</style>
+</head>
+<body>
+<div class="hub">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="avatar">dixi<br>pixie8</div>
+    <div class="name">dixipixie8</div>
+    <div class="class">Polímata Disperso · en evolución</div>
+    <div class="level-row">
+      <span class="level-pill">⚡ Nivel 8</span>
+      <span class="streak">🔥 3 días</span>
+    </div>
+    <div class="xp-bar-wrap"><div class="xp-bar-fill"></div></div>
+    <div class="xp-label">460 / 1000 XP → Nivel 9</div>
+  </div>
+
+  <!-- Día actual -->
+  <div class="day-card" id="day-card">
+    <div class="day-title">Hoy</div>
+    <div class="day-name" id="day-name">—</div>
+    <div class="day-sub" id="day-sub">—</div>
+  </div>
+
+  <!-- Stats mini -->
+  <div class="section-label">Estadísticas</div>
+  <div class="stats-mini">
+    <div class="stat-m"><div class="stat-m-val" style="color:#1D9E75">37</div><div class="stat-m-bar"><div class="stat-m-bar-fill" style="width:37%;background:#1D9E75"></div></div><div class="stat-m-name">Cuerpo</div></div>
+    <div class="stat-m"><div class="stat-m-val" style="color:#7F77DD">74</div><div class="stat-m-bar"><div class="stat-m-bar-fill" style="width:74%;background:#7F77DD"></div></div><div class="stat-m-name">Mente</div></div>
+    <div class="stat-m"><div class="stat-m-val" style="color:#D4537E">41</div><div class="stat-m-bar"><div class="stat-m-bar-fill" style="width:41%;background:#D4537E"></div></div><div class="stat-m-name">Vínculo</div></div>
+    <div class="stat-m"><div class="stat-m-val" style="color:#EF9F27">47</div><div class="stat-m-bar"><div class="stat-m-bar-fill" style="width:47%;background:#EF9F27"></div></div><div class="stat-m-name">Creación</div></div>
+    <div class="stat-m"><div class="stat-m-val" style="color:#E24B4A">20</div><div class="stat-m-bar"><div class="stat-m-bar-fill" style="width:20%;background:#E24B4A"></div></div><div class="stat-m-name">Recursos</div></div>
+  </div>
+
+  <!-- Módulos principales -->
+  <div class="section-label">Módulos del sistema</div>
+
+  <div class="grid">
+    <a class="module-card" href="banco_misiones_real.html">
+      <div class="mc-icon">⚔️</div>
+      <div class="mc-title">Banco de misiones</div>
+      <div class="mc-sub">11 categorías · tus actividades reales</div>
+      <span class="mc-badge badge-new">34 misiones</span>
+    </a>
+
+    <div class="module-card" onclick="alert('Abre el archivo: ritual_diario.html')">
+      <div class="mc-icon">☀️</div>
+      <div class="mc-title">Ritual diario</div>
+      <div class="mc-sub">Check-in · boss del día · pomodoro</div>
+      <span class="mc-badge badge-daily">5 min · mañana</span>
+    </div>
+
+    <div class="module-card" onclick="alert('Abre el archivo: centro_pokemon.html')">
+      <div class="mc-icon">🏥</div>
+      <div class="mc-title">Centro Pokémon</div>
+      <div class="mc-sub">Revisión semanal · 6 fases · 20-30 min</div>
+      <span class="mc-badge badge-weekly">Domingos</span>
+    </div>
+
+    <div class="module-card" onclick="alert('Abre el archivo: rueda_vida.html')">
+      <div class="mc-icon">🎯</div>
+      <div class="mc-title">Rueda de la vida</div>
+      <div class="mc-sub">11 categorías · puntajes en vivo</div>
+      <span class="mc-badge badge-daily">Promedio: 46</span>
+    </div>
+
+    <a class="module-card wide" href="banco_misiones_real.html" style="background:#EEEDFE;border-color:#AFA9EC">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="mc-icon" style="margin:0">📊</div>
+        <div>
+          <div class="mc-title" style="color:#26215C">Ficha de personaje</div>
+          <div class="mc-sub" style="color:#534AB7">Todo integrado: rueda + misiones + nivel + evolución</div>
+        </div>
+        <span style="margin-left:auto;font-size:18px">→</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- Zonas críticas -->
+  <div class="section-label">Zonas críticas activas</div>
+  <div class="grid">
+    <div class="module-card critical">
+      <div class="mc-icon">🏥</div>
+      <div class="mc-title">Salud & Cuerpo</div>
+      <div class="mc-sub">8 evaluaciones médicas pendientes</div>
+      <span class="mc-badge badge-alert">Score 25 ⚠</span>
+    </div>
+    <div class="module-card critical">
+      <div class="mc-icon">💰</div>
+      <div class="mc-title">Economía</div>
+      <div class="mc-sub">Más baja de la rueda · modo emergencia</div>
+      <span class="mc-badge badge-alert">Score 20 ⚠</span>
+    </div>
+    <div class="module-card critical" style="grid-column:1/-1">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="mc-icon" style="margin:0">💜</div>
+        <div>
+          <div class="mc-title">Sexoafectivo</div>
+          <div class="mc-sub">Costo emocional acumulado · terapia como misión central</div>
+        </div>
+        <span class="mc-badge badge-alert" style="margin-left:auto;white-space:nowrap">Score 22 ⚠</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Misión urgente -->
+  <div class="section-label">Próximo hito</div>
+  <div class="module-card" style="border-color:#1D9E75;border-width:1.5px;background:#E1F5EE">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="font-size:20px">⚽</div>
+      <div>
+        <div class="mc-title" style="color:#085041">Pichanga con Ale</div>
+        <div class="mc-sub" style="color:#0F6E56">Fin de semana 21 de mayo · +20 XP · no cancelar</div>
+      </div>
+      <span style="margin-left:auto;font-size:18px">→</span>
+    </div>
+  </div>
+
+  <div class="footer">dixipixie8 · Polímata Disperso · Sistema pokémonístico de gestión personal</div>
+</div>
+
+<script>
+const DAYS = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const MONTHS = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const now = new Date();
+document.getElementById('day-name').textContent = DAYS[now.getDay()]+', '+now.getDate()+' de '+MONTHS[now.getMonth()];
+const hour = now.getHours();
+const greeting = hour < 12 ? 'Buenos días' : hour < 19 ? 'Buenas tardes' : 'Buenas noches';
+document.getElementById('day-sub').textContent = greeting+' · ¿cuál es el boss del día?';
+</script>
+</body>
+</html>
