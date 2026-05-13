@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Economía — dixipixie8</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f0f1a;color:#e8e6f0;min-height:100vh;padding:1rem}
+h1{font-size:1.1rem;font-weight:600;color:#a89de8;margin-bottom:1.5rem;display:flex;align-items:center;gap:8px}
+.badge-emergencia{font-size:11px;background:#ff4444;color:#fff;padding:2px 10px;border-radius:20px;font-weight:500}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1.5rem}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+@media(max-width:600px){.grid-4{grid-template-columns:1fr 1fr}.grid-2{grid-template-columns:1fr}}
+.card{background:#1a1a2e;border:1px solid #2a2a4a;border-radius:12px;padding:14px 16px}
+.card-title{font-size:11px;color:#7a7a9a;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.card-value{font-size:22px;font-weight:600}
+.val-rojo{color:#ff6b6b}
+.val-verde{color:#51cf66}
+.val-amarillo{color:#ffd43b}
+.val-normal{color:#e8e6f0}
+.section-title{font-size:12px;color:#7a7a9a;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;margin-top:1.5rem}
+.barra-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:13px}
+.barra-label{min-width:170px;color:#a0a0c0}
+.barra-track{flex:1;background:#2a2a4a;border-radius:4px;height:8px;overflow:hidden}
+.barra-fill{height:100%;border-radius:4px;transition:width .3s}
+.barra-monto{min-width:90px;text-align:right;font-weight:500}
+.highlight-rojo{color:#ff6b6b}
+.highlight-verde{color:#51cf66}
+.deuda-box{background:#2a0a0a;border:1px solid #5a1a1a;border-radius:12px;padding:14px 16px;margin-bottom:1rem}
+.deuda-title{font-size:13px;color:#ff8888;font-weight:500;margin-bottom:10px}
+.deuda-track{background:#1a0808;border-radius:6px;height:16px;overflow:hidden;margin:8px 0}
+.deuda-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,#ff4444,#ff8800)}
+.deuda-labels{font-size:11px;color:#7a7a9a;display:flex;justify-content:space-between}
+.slider-row{display:flex;align-items:center;gap:12px;margin:10px 0;font-size:13px}
+.slider-row label{min-width:160px;color:#a0a0c0}
+.slider-row input[type=range]{flex:1;accent-color:#7F77DD}
+.slider-row span{min-width:90px;text-align:right;font-weight:500;color:#a89de8}
+.sim-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px}
+@media(max-width:500px){.sim-grid{grid-template-columns:1fr 1fr}}
+.sim-card{background:#0f0f1a;border:1px solid #2a2a4a;border-radius:8px;padding:10px;text-align:center}
+.sim-label{font-size:11px;color:#7a7a9a;margin-bottom:4px}
+.sim-val{font-size:17px;font-weight:600}
+.alerta{padding:10px 14px;border-radius:8px;font-size:13px;margin-top:8px}
+.alerta-warn{background:#2a2000;border:1px solid #5a4000;color:#ffd43b}
+.alerta-ok{background:#0a2a0a;border:1px solid #1a5a1a;color:#51cf66}
+.mision-lista{display:flex;flex-direction:column;gap:2px}
+.mision-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #2a2a4a;cursor:pointer}
+.mision-row:last-child{border-bottom:none}
+.mision-check{width:22px;height:22px;border-radius:50%;border:1.5px solid #4a4a7a;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.mision-check.done{background:#1a5a1a;border-color:#51cf66}
+.mision-info{flex:1}
+.mision-nombre{font-size:14px;font-weight:500;color:#e8e6f0}
+.mision-nombre.done{text-decoration:line-through;color:#5a5a8a}
+.mision-desc{font-size:12px;color:#7a7a9a;margin-top:3px}
+.badges{display:flex;gap:6px;flex-direction:column;align-items:flex-end}
+.badge-xp{font-size:11px;background:#1a1a4a;color:#a89de8;padding:2px 8px;border-radius:20px}
+.badge-tipo{font-size:11px;background:#1a2a1a;color:#51cf66;padding:2px 8px;border-radius:20px}
+.badge-tipo.diaria{background:#1a1a2a;color:#888}
+.badge-tipo.quest{background:#2a1a0a;color:#ffd43b}
+.badge-tipo.mensual{background:#1a2a2a;color:#4dc9d1}
+.presupuesto-tabla{width:100%;font-size:13px;border-collapse:collapse}
+.presupuesto-tabla tr{border-bottom:1px solid #2a2a4a}
+.presupuesto-tabla tr:last-child{border-bottom:none}
+.presupuesto-tabla td{padding:8px 4px;color:#a0a0c0}
+.presupuesto-tabla td:last-child{text-align:right;font-weight:500;color:#e8e6f0}
+.presupuesto-tabla .nuevo{color:#51cf66}
+.presupuesto-tabla .reducido{color:#ffd43b}
+.presupuesto-tabla .total-row td{color:#e8e6f0;font-weight:600;border-top:1px solid #4a4a7a;padding-top:10px}
+.tabs{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.tab{padding:6px 14px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid #2a2a4a;background:#1a1a2e;color:#7a7a9a;transition:all .2s}
+.tab.active{background:#7F77DD;color:#fff;border-color:#7F77DD}
+.tab-content{display:none}
+.tab-content.active{display:block}
+.score-row{display:flex;align-items:center;gap:12px;margin-top:1rem}
+.score-actual{text-align:center;background:#2a0a0a;border:1px solid #5a1a1a;border-radius:12px;padding:16px;min-width:100px}
+.score-num{font-size:48px;font-weight:600;color:#ff6b6b}
+.score-meta{text-align:center;background:#0a2a0a;border:1px solid #1a5a1a;border-radius:12px;padding:16px;min-width:100px}
+.score-meta .score-num{color:#51cf66}
+.score-flecha{font-size:28px;color:#4a4a7a}
+.score-cond{flex:1;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:12px;padding:12px;font-size:13px;color:#a0a0c0}
+.score-cond strong{color:#51cf66;display:block;margin-bottom:4px}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#7a7a9a;text-decoration:none;margin-bottom:1rem}
+.back-link:hover{color:#a89de8}
+</style>
+</head>
+<body>
+<a href="index.html" class="back-link">← volver al hub</a>
+<h1>💰 Economía <span class="badge-emergencia">modo emergencia</span></h1>
+
+<div class="section-title">estado hoy — 13/05/2026</div>
+<div class="grid-4">
+  <div class="card"><div class="card-title">Sueldo</div><div class="card-value val-normal">$2.634.000</div></div>
+  <div class="card"><div class="card-title">Ahorro automático</div><div class="card-value val-verde">$200.000</div></div>
+  <div class="card"><div class="card-title">Deuda tarjeta</div><div class="card-value val-rojo">$6.438.681</div></div>
+  <div class="card"><div class="card-title">Gasto cartas/mes</div><div class="card-value val-amarillo">$193.740</div></div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('radiografia')">Radiografía</div>
+  <div class="tab" onclick="showTab('deuda')">Plan deuda</div>
+  <div class="tab" onclick="showTab('presupuesto')">Presupuesto objetivo</div>
+  <div class="tab" onclick="showTab('misiones')">Misiones</div>
+</div>
+
+<div id="tab-radiografia" class="tab-content active">
+  <div class="card">
+    <div class="section-title" style="margin-top:0">dónde va el sueldo — meses normales</div>
+    <div class="barra-row">
+      <div class="barra-label">🃏 Cartas TCG</div>
+      <div class="barra-track"><div class="barra-fill" style="width:85%;background:#ff4444"></div></div>
+      <div class="barra-monto highlight-rojo">$194.000</div>
+    </div>
+    <div class="barra-row">
+      <div class="barra-label">🏦 Ahorro automático</div>
+      <div class="barra-track"><div class="barra-fill" style="width:60%;background:#51cf66"></div></div>
+      <div class="barra-monto highlight-verde">$200.000</div>
+    </div>
+    <div class="barra-row">
+      <div class="barra-label">💳 Tarjeta (mínimo)</div>
+      <div class="barra-track"><div class="barra-fill" style="width:50%;background:#ff8800"></div></div>
+      <div class="barra-monto highlight-rojo">$131.000</div>
+    </div>
+    <div class="barra-row">
+      <div class="barra-label">🛒 Supermercado</div>
+      <div class="barra-track"><div class="barra-fill" style="width:32%;background:#a89de8"></div></div>
+      <div class="barra-monto">$85.000</div>
+    </div>
+    <div class="barra-row">
+      <div class="barra-label">👨‍👩‍👧 Traspasos familia/amigos</div>
+      <div class="barra-track"><div class="barra-fill" style="width:65%;background:#7a6aaa"></div></div>
+      <div class="barra-monto">$173.000</div>
+    </div>
+    <div class="barra-row">
+      <div class="barra-label">💵 Retiro efectivo</div>
+      <div class="barra-track"><div class="barra-fill" style="width:47%;background:#5a5a8a"></div></div>
+      <div class="barra-monto">$125.000</div>
+    </div>
+    <div class="barra-row">
+      <div class="barra-label">🍽️ Comida / restaurantes</div>
+      <div class="barra-track"><div class="barra-fill" style="width:20%;background:#a89de8"></div></div>
+      <div class="barra-monto">$53.000</div>
+    </div>
+    <div class="barra-row">
+      <div class="barra-label">❓ Gastos no identificados</div>
+      <div class="barra-track"><div class="barra-fill" style="width:100%;background:#3a3a5a"></div></div>
+      <div class="barra-monto">$430.000</div>
+    </div>
+    <div style="margin-top:12px;padding-top:10px;border-top:1px solid #2a2a4a;font-size:12px;color:#7a7a9a">
+      ⚠️ El mayor problema no es lo que ves — son los $430k sin categoría y el efectivo invisible.
+    </div>
+  </div>
+</div>
+
+<div id="tab-deuda" class="tab-content">
+  <div class="deuda-box">
+    <div class="deuda-title">💳 Tarjeta Visa Signature — cupo utilizado</div>
+    <div style="display:flex;justify-content:space-between;font-size:13px;color:#ff8888;margin-bottom:6px">
+      <span>$6.438.681 utilizados</span><span>$14.380.000 total</span>
+    </div>
+    <div class="deuda-track"><div class="deuda-fill" id="deuda-barra" style="width:44.8%"></div></div>
+    <div class="deuda-labels"><span id="deuda-pagado-lbl">$0 pagado</span><span>44.8% usado</span></div>
+  </div>
+  <div class="card">
+    <div class="section-title" style="margin-top:0">simulador de pago</div>
+    <div class="slider-row">
+      <label>Pago mensual a tarjeta</label>
+      <input type="range" min="100000" max="700000" step="10000" value="300000" id="slider-pago" oninput="actualizarSim()">
+      <span id="val-pago">$300.000</span>
+    </div>
+    <div class="slider-row">
+      <label>Meses transcurridos</label>
+      <input type="range" min="0" max="22" step="1" value="0" id="slider-meses" oninput="actualizarSim()">
+      <span id="val-meses">0 meses</span>
+    </div>
+    <div class="sim-grid">
+      <div class="sim-card"><div class="sim-label">Meses para liquidar</div><div class="sim-val val-amarillo" id="sim-meses">22</div></div>
+      <div class="sim-card"><div class="sim-label">Deuda proyectada</div><div class="sim-val val-rojo" id="sim-deuda">$6.438.681</div></div>
+      <div class="sim-card"><div class="sim-label">Margen restante</div><div class="sim-val" id="sim-margen">$1.000.000</div></div>
+    </div>
+    <div id="sim-alerta"></div>
+  </div>
+</div>
+
+<div id="tab-presupuesto" class="tab-content">
+  <div class="card">
+    <div class="section-title" style="margin-top:0">presupuesto objetivo mensual</div>
+    <table class="presupuesto-tabla">
+      <tr><td>💰 Ahorro CuentaRUT (automático)</td><td>$200.000</td></tr>
+      <tr><td>🛒 Supermercado</td><td>$80.000</td></tr>
+      <tr><td>🍽️ Comida / restaurantes</td><td>$45.000</td></tr>
+      <tr class="reducido"><td>🃏 Cartas TCG <strong>(TOPE)</strong></td><td class="reducido">$100.000 ↓</td></tr>
+      <tr><td>👨‍👩‍👧 Traspasos familia / amigos</td><td>$150.000</td></tr>
+      <tr><td>💵 Retiro efectivo</td><td>$80.000</td></tr>
+      <tr><td>🕺 Deporte / danza</td><td>$20.000</td></tr>
+      <tr><td>🎮 Entretenimiento</td><td>$15.000</td></tr>
+      <tr><td>🏦 Comisiones banco</td><td>$8.000</td></tr>
+      <tr><td>🚗 Transporte</td><td>$8.000</td></tr>
+      <tr><td>❓ Gastos varios</td><td>$150.000</td></tr>
+      <tr class="nuevo"><td>💳 <strong>Pago extra tarjeta</strong></td><td class="nuevo">$300.000 ★</td></tr>
+      <tr class="nuevo"><td>🐣 <strong>Colchón / ahorro extra</strong></td><td class="nuevo">$100.000 ★</td></tr>
+      <tr class="total-row"><td>TOTAL</td><td>$1.256.000</td></tr>
+      <tr class="total-row"><td>Sueldo</td><td>$2.634.000</td></tr>
+      <tr class="total-row"><td style="color:#51cf66">Diferencia (margen)</td><td class="highlight-verde">$1.378.000</td></tr>
+    </table>
+    <div style="font-size:12px;color:#7a7a9a;margin-top:12px">★ Los ítems nuevos son el cambio clave. El margen alto significa que hay gastos que aún no están identificados.</div>
+  </div>
+</div>
+
+<div id="tab-misiones" class="tab-content">
+  <div class="card">
+    <div id="misiones-container" class="mision-lista"></div>
+  </div>
+</div>
+
+<div class="section-title">score economía → meta</div>
+<div class="score-row">
+  <div class="score-actual"><div style="font-size:12px;color:#7a7a9a;margin-bottom:4px">ahora</div><div class="score-num">20</div></div>
+  <div class="score-flecha">→</div>
+  <div class="score-meta"><div style="font-size:12px;color:#7a7a9a;margin-bottom:4px">meta 1</div><div class="score-num">40</div></div>
+  <div class="score-cond"><strong>¿Cómo llegar a 40?</strong>Registrar gastos 14 días seguidos + completar presupuesto base + 1 pago extra a tarjeta.</div>
+</div>
+
+<script>
+const misiones = [
+  {n:"Registrar gastos del día",d:"Anotar cada cargo antes de dormir. 5 min máximo.",t:"diaria",xp:10},
+  {n:"Revisar saldo tarjeta",d:"Abrir la app del banco y ver el cupo utilizado.",t:"diaria",xp:10},
+  {n:"Respetar tope semanal de cartas ($25.000)",d:"Si ya lo gastaste, la respuesta es no. Sin excepciones.",t:"semanal",xp:20},
+  {n:"Pauta mensual de economía",d:"30 min cada 24 del mes: ingresos, gastos, deuda, plan.",t:"mensual",xp:50},
+  {n:"Construir presupuesto base en Sheets",d:"Desglosar en qué va el sueldo categoría por categoría.",t:"quest",xp:40},
+  {n:"Definir tope mensual de cartas",d:"Acordar contigo mismo el límite mensual. Escribirlo.",t:"quest",xp:30},
+  {n:"Primer pago extra a tarjeta",d:"Destinar $300.000 directamente a reducir el saldo.",t:"quest",xp:50},
+  {n:"Identificar los $430k invisibles",d:"Categorizar los gastos en efectivo y sin descripción.",t:"quest",xp:40},
+];
+
+const cont = document.getElementById('misiones-container');
+const done = {};
+misiones.forEach((m,i)=>{
+  const div = document.createElement('div');
+  div.className='mision-row';
+  div.innerHTML=`
+    <div class="mision-check" id="chk${i}"></div>
+    <div class="mision-info">
+      <div class="mision-nombre" id="nom${i}">${m.n}</div>
+      <div class="mision-desc">${m.d}</div>
+    </div>
+    <div class="badges">
+      <span class="badge-xp">+${m.xp} XP</span>
+      <span class="badge-tipo ${m.t}">${m.t}</span>
+    </div>`;
+  div.onclick=()=>{
+    done[i]=!done[i];
+    document.getElementById('chk'+i).classList.toggle('done',done[i]);
+    document.getElementById('nom'+i).classList.toggle('done',done[i]);
+  };
+  cont.appendChild(div);
+});
+
+function fmt(n){return'$'+Math.round(n).toLocaleString('es-CL')}
+
+function actualizarSim(){
+  const pago=parseInt(document.getElementById('slider-pago').value);
+  const mesesPasados=parseInt(document.getElementById('slider-meses').value);
+  document.getElementById('val-pago').textContent=fmt(pago);
+  document.getElementById('val-meses').textContent=mesesPasados+' meses';
+  const deuda=6438681;
+  const mesesTotal=Math.ceil(deuda/pago);
+  const deudaActual=Math.max(0,deuda-(mesesPasados*pago));
+  const margen=2634000-1256000-pago;
+  document.getElementById('sim-meses').textContent=mesesTotal;
+  document.getElementById('sim-deuda').textContent=fmt(deudaActual);
+  document.getElementById('sim-margen').textContent=fmt(Math.abs(margen));
+  document.getElementById('sim-margen').className='sim-val '+(margen>=0?'val-verde':'val-rojo');
+  const pct=Math.max(0,(deudaActual/14380000)*100);
+  document.getElementById('deuda-barra').style.width=pct+'%';
+  document.getElementById('deuda-pagado-lbl').textContent=fmt(deuda-deudaActual)+' pagado';
+  const al=document.getElementById('sim-alerta');
+  if(margen<0){al.innerHTML='<div class="alerta alerta-warn">⚠️ Pago muy alto para el margen real. Baja a $300.000 para no quedar ajustado.</div>';}
+  else if(mesesTotal<=18){al.innerHTML='<div class="alerta alerta-ok">✓ Liquidas la tarjeta en menos de 1.5 años. Plan realista.</div>';}
+  else{al.innerHTML='';}
+}
+
+function showTab(id){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+actualizarSim();
+</script>
+</body>
+</html>
