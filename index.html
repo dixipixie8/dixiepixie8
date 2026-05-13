@@ -2,200 +2,337 @@
 <html>
 <head>
 <meta charset="utf-8">
-  <link rel="manifest" href="manifest.json">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="dixipixie8">
-  <link rel="apple-touch-icon" href="icon-192.png">
-  <meta name="theme-color" content="#7F77DD">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>dixipixie8 — Sistema de gestión</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dixipixie8</title>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="dixipixie8">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#7F77DD">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:20px}
+body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:16px}
 .hub{max-width:480px;margin:0 auto}
-
-.header{text-align:center;padding:24px 0 20px}
+.header{text-align:center;padding:20px 0 16px}
 .avatar{width:64px;height:64px;border-radius:50%;background:#EEEDFE;border:2px solid #7F77DD;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#3C3489;margin:0 auto 10px;line-height:1.3;text-align:center}
 .name{font-size:20px;font-weight:600;color:#1a1a1a}
 .class{font-size:12px;color:#7F77DD;margin-top:2px}
 .level-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
-.level-pill{background:#EEEDFE;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:500;color:#3C3489}
-.streak{background:#FAEEDA;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:500;color:#412402}
-
-.xp-bar-wrap{background:#e0e0e0;border-radius:4px;height:5px;margin:12px 0 4px;overflow:hidden}
-.xp-bar-fill{height:100%;background:#7F77DD;border-radius:4px;width:46%}
+.pill{border-radius:20px;padding:3px 12px;font-size:12px;font-weight:500}
+.pill-purple{background:#EEEDFE;color:#3C3489}
+.pill-yellow{background:#FAEEDA;color:#412402}
+.xp-bar-wrap{background:#e0e0e0;border-radius:4px;height:5px;margin:10px 0 3px;overflow:hidden}
+.xp-bar-fill{height:100%;background:#7F77DD;border-radius:4px;transition:width 0.5s}
 .xp-label{font-size:11px;color:#888;text-align:center}
-
-.section-label{font-size:10px;font-weight:600;color:#888;letter-spacing:0.08em;text-transform:uppercase;margin:18px 0 8px}
-
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.module-card{background:#fff;border-radius:12px;border:0.5px solid #e0e0e0;padding:16px;cursor:pointer;transition:all 0.15s;text-decoration:none;display:block}
-.module-card:hover{border-color:#7F77DD;transform:translateY(-1px)}
-.module-card.wide{grid-column:1/-1}
-.module-card.critical{border-color:#E24B4A;border-width:1.5px}
-.mc-icon{font-size:24px;margin-bottom:8px}
-.mc-title{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:2px}
-.mc-sub{font-size:11px;color:#888;line-height:1.4}
-.mc-badge{display:inline-block;font-size:9px;font-weight:600;padding:1px 7px;border-radius:6px;margin-top:5px}
-.badge-daily{background:#EEEDFE;color:#3C3489}
-.badge-weekly{background:#E1F5EE;color:#085041}
-.badge-alert{background:#FCEBEB;color:#791F1F}
-.badge-new{background:#FAEEDA;color:#412402}
-
-.stats-mini{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:8px}
+.day-card{background:#7F77DD;border-radius:12px;padding:14px 16px;color:white;margin-bottom:10px}
+.day-title{font-size:10px;font-weight:600;opacity:0.8;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px}
+.day-name{font-size:17px;font-weight:600}
+.day-sub{font-size:11px;opacity:0.75;margin-top:2px}
+.section-label{font-size:10px;font-weight:600;color:#888;letter-spacing:0.08em;text-transform:uppercase;margin:14px 0 7px;display:flex;align-items:center;gap:8px}
+.sync-ok{font-size:10px;color:#1D9E75;font-weight:500}
+.sync-err{font-size:10px;color:#E24B4A;font-weight:500}
+.stats-mini{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:4px}
 .stat-m{background:#fff;border-radius:8px;padding:7px 4px;text-align:center;border:0.5px solid #e0e0e0}
 .stat-m-val{font-size:14px;font-weight:600}
-.stat-m-bar{height:3px;border-radius:2px;margin:3px auto 2px;width:80%}
-.stat-m-bar-fill{height:100%;border-radius:2px}
+.stat-m-bar{height:3px;border-radius:2px;margin:3px auto 2px;width:80%;background:#eee;overflow:hidden}
+.stat-m-bar-fill{height:100%;border-radius:2px;transition:width 0.5s}
 .stat-m-name{font-size:9px;color:#888}
-
-.day-card{background:#7F77DD;border-radius:12px;padding:14px 16px;color:white;margin-bottom:8px}
-.day-title{font-size:11px;font-weight:600;opacity:0.8;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px}
-.day-name{font-size:18px;font-weight:600}
-.day-sub{font-size:11px;opacity:0.75;margin-top:2px}
-
-.footer{text-align:center;margin-top:20px;font-size:10px;color:#bbb;padding-bottom:10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.card{background:#fff;border-radius:12px;border:0.5px solid #e0e0e0;padding:14px;cursor:pointer;transition:all 0.15s;text-decoration:none;display:block}
+.card:hover{border-color:#7F77DD;transform:translateY(-1px)}
+.card.wide{grid-column:1/-1}
+.card.critical{border-color:#E24B4A;border-width:1.5px}
+.card.accent{background:#EEEDFE;border-color:#AFA9EC}
+.card-icon{font-size:22px;margin-bottom:7px}
+.card-title{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:2px}
+.card-sub{font-size:11px;color:#888;line-height:1.4}
+.badge{display:inline-block;font-size:9px;font-weight:600;padding:1px 7px;border-radius:6px;margin-top:5px}
+.bd{background:#EEEDFE;color:#3C3489}
+.bw{background:#E1F5EE;color:#085041}
+.ba{background:#FCEBEB;color:#791F1F}
+.by{background:#FAEEDA;color:#412402}
+.missions-panel{background:#fff;border-radius:12px;border:0.5px solid #e0e0e0;padding:14px;margin-bottom:8px}
+.mp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.mp-title{font-size:13px;font-weight:600;color:#1a1a1a}
+.mp-xp{font-size:12px;color:#534AB7;font-weight:500}
+.mission-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:0.5px solid #f0f0f0;cursor:pointer}
+.mission-row:last-child{border-bottom:none}
+.m-check{width:20px;height:20px;border-radius:50%;border:1.5px solid #ccc;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all 0.2s}
+.m-check.done{background:#1D9E75;border-color:#1D9E75;color:white}
+.m-info{flex:1;min-width:0}
+.m-title{font-size:12px;font-weight:500;color:#1a1a1a}
+.m-title.struck{text-decoration:line-through;color:#bbb}
+.m-cat{font-size:10px;color:#aaa;margin-top:1px}
+.m-xp{font-size:10px;color:#aaa;font-weight:500;flex-shrink:0}
+.m-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.add-form{background:#f5f4f0;border-radius:10px;padding:12px;margin-top:10px}
+.add-form input,.add-form select{width:100%;padding:7px 10px;border-radius:8px;border:0.5px solid #ddd;background:#fff;color:#1a1a1a;font-size:12px;margin-bottom:6px;font-family:sans-serif}
+.add-row{display:flex;gap:6px}
+.add-row select{flex:1;margin-bottom:0}
+.btn-add{width:100%;padding:9px;border-radius:8px;background:#7F77DD;color:white;border:none;font-size:13px;font-weight:500;cursor:pointer;margin-top:8px}
+.btn-add:hover{opacity:0.88}
+.btn-add:disabled{opacity:0.4}
+.loading{text-align:center;padding:16px;color:#888;font-size:12px}
+.footer{text-align:center;margin-top:16px;padding-bottom:16px;font-size:10px;color:#ccc}
+.notif{position:fixed;bottom:16px;left:50%;transform:translateX(-50%) translateY(10px);background:#1D9E75;color:white;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:500;opacity:0;transition:all 0.3s;pointer-events:none;z-index:99;white-space:nowrap}
+.notif.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 <div class="hub">
-
-  <!-- Header -->
   <div class="header">
     <div class="avatar">dixi<br>pixie8</div>
     <div class="name">dixipixie8</div>
-    <div class="class">Polímata Disperso · en evolución</div>
+    <div class="class">Polimata Disperso en evolucion</div>
     <div class="level-row">
-      <span class="level-pill">⚡ Nivel 8</span>
-      <span class="streak">🔥 3 días</span>
+      <span class="pill pill-purple" id="level-pill">Nivel 8</span>
+      <span class="pill pill-yellow" id="streak-pill">3 dias</span>
     </div>
-    <div class="xp-bar-wrap"><div class="xp-bar-fill"></div></div>
-    <div class="xp-label">460 / 1000 XP → Nivel 9</div>
+    <div class="xp-bar-wrap"><div class="xp-bar-fill" id="xp-fill" style="width:46%"></div></div>
+    <div class="xp-label" id="xp-label">460 / 1000 XP</div>
   </div>
 
-  <!-- Día actual -->
-  <div class="day-card" id="day-card">
+  <div class="day-card">
     <div class="day-title">Hoy</div>
-    <div class="day-name" id="day-name">—</div>
-    <div class="day-sub" id="day-sub">—</div>
+    <div class="day-name" id="day-name"></div>
+    <div class="day-sub" id="day-sub"></div>
   </div>
 
-  <!-- Stats mini -->
-  <div class="section-label">Estadísticas</div>
-  <div class="stats-mini">
-    <div class="stat-m"><div class="stat-m-val" style="color:#1D9E75">37</div><div class="stat-m-bar"><div class="stat-m-bar-fill" style="width:37%;background:#1D9E75"></div></div><div class="stat-m-name">Cuerpo</div></div>
-    <div class="stat-m"><div class="stat-m-val" style="color:#7F77DD">74</div><div class="stat-m-bar"><div class="stat-m-bar-fill" style="width:74%;background:#7F77DD"></div></div><div class="stat-m-name">Mente</div></div>
-    <div class="stat-m"><div class="stat-m-val" style="color:#D4537E">41</div><div class="stat-m-bar"><div class="stat-m-bar-fill" style="width:41%;background:#D4537E"></div></div><div class="stat-m-name">Vínculo</div></div>
-    <div class="stat-m"><div class="stat-m-val" style="color:#EF9F27">47</div><div class="stat-m-bar"><div class="stat-m-bar-fill" style="width:47%;background:#EF9F27"></div></div><div class="stat-m-name">Creación</div></div>
-    <div class="stat-m"><div class="stat-m-val" style="color:#E24B4A">20</div><div class="stat-m-bar"><div class="stat-m-bar-fill" style="width:20%;background:#E24B4A"></div></div><div class="stat-m-name">Recursos</div></div>
+  <div class="section-label">Estadisticas <span id="stats-sync"></span></div>
+  <div class="stats-mini" id="stats-mini">
+    <div class="stat-m"><div class="stat-m-val" style="color:#1D9E75" id="g-cuerpo">--</div><div class="stat-m-bar"><div class="stat-m-bar-fill" id="gb-cuerpo" style="background:#1D9E75"></div></div><div class="stat-m-name">Cuerpo</div></div>
+    <div class="stat-m"><div class="stat-m-val" style="color:#7F77DD" id="g-mente">--</div><div class="stat-m-bar"><div class="stat-m-bar-fill" id="gb-mente" style="background:#7F77DD"></div></div><div class="stat-m-name">Mente</div></div>
+    <div class="stat-m"><div class="stat-m-val" style="color:#D4537E" id="g-vinculo">--</div><div class="stat-m-bar"><div class="stat-m-bar-fill" id="gb-vinculo" style="background:#D4537E"></div></div><div class="stat-m-name">Vinculo</div></div>
+    <div class="stat-m"><div class="stat-m-val" style="color:#EF9F27" id="g-creacion">--</div><div class="stat-m-bar"><div class="stat-m-bar-fill" id="gb-creacion" style="background:#EF9F27"></div></div><div class="stat-m-name">Creacion</div></div>
+    <div class="stat-m"><div class="stat-m-val" style="color:#E24B4A" id="g-recursos">--</div><div class="stat-m-bar"><div class="stat-m-bar-fill" id="gb-recursos" style="background:#E24B4A"></div></div><div class="stat-m-name">Recursos</div></div>
   </div>
 
-  <!-- Módulos principales -->
-  <div class="section-label">Módulos del sistema</div>
-
-  <div class="grid">
-    <a class="module-card" href="banco_misiones_real.html">
-      <div class="mc-icon">⚔️</div>
-      <div class="mc-title">Banco de misiones</div>
-      <div class="mc-sub">11 categorías · tus actividades reales</div>
-      <span class="mc-badge badge-new">34 misiones</span>
-    </a>
-
-    <div class="module-card" onclick="alert('Abre el archivo: ritual_diario.html')">
-      <div class="mc-icon">☀️</div>
-      <div class="mc-title">Ritual diario</div>
-      <div class="mc-sub">Check-in · boss del día · pomodoro</div>
-      <span class="mc-badge badge-daily">5 min · mañana</span>
+  <div class="section-label">Misiones activas <span id="missions-sync"></span></div>
+  <div class="missions-panel">
+    <div class="mp-header">
+      <div class="mp-title">Hoy</div>
+      <div class="mp-xp" id="xp-today">0 XP</div>
     </div>
-
-    <div class="module-card" onclick="alert('Abre el archivo: centro_pokemon.html')">
-      <div class="mc-icon">🏥</div>
-      <div class="mc-title">Centro Pokémon</div>
-      <div class="mc-sub">Revisión semanal · 6 fases · 20-30 min</div>
-      <span class="mc-badge badge-weekly">Domingos</span>
-    </div>
-
-    <div class="module-card" onclick="alert('Abre el archivo: rueda_vida.html')">
-      <div class="mc-icon">🎯</div>
-      <div class="mc-title">Rueda de la vida</div>
-      <div class="mc-sub">11 categorías · puntajes en vivo</div>
-      <span class="mc-badge badge-daily">Promedio: 46</span>
-    </div>
-
-    <a class="module-card wide" href="banco_misiones_real.html" style="background:#EEEDFE;border-color:#AFA9EC">
-      <div style="display:flex;align-items:center;gap:12px">
-        <div class="mc-icon" style="margin:0">📊</div>
-        <div>
-          <div class="mc-title" style="color:#26215C">Ficha de personaje</div>
-          <div class="mc-sub" style="color:#534AB7">Todo integrado: rueda + misiones + nivel + evolución</div>
-        </div>
-        <span style="margin-left:auto;font-size:18px">→</span>
+    <div id="mission-list"><div class="loading">Cargando desde Sheets...</div></div>
+    <div class="add-form">
+      <input type="text" id="new-title" placeholder="Nueva mision..."/>
+      <div class="add-row">
+        <select id="new-cat">
+          <option value="dis_fis">Dis. fisica</option>
+          <option value="salud">Salud</option>
+          <option value="dis_int">Dis. intelectual</option>
+          <option value="trabajo">Trabajo</option>
+          <option value="politica">Politica</option>
+          <option value="familia">Familia</option>
+          <option value="amigos">Amigos</option>
+          <option value="sexoafect">Sexoafectivo</option>
+          <option value="juego">Juego</option>
+          <option value="arte">Arte</option>
+          <option value="economia">Economia</option>
+        </select>
+        <select id="new-tipo">
+          <option value="daily">Diaria</option>
+          <option value="weekly">Semanal</option>
+          <option value="quest">Quest</option>
+        </select>
+        <select id="new-xp">
+          <option value="10">+10 XP</option>
+          <option value="20">+20 XP</option>
+          <option value="30">+30 XP</option>
+          <option value="50">+50 XP</option>
+        </select>
       </div>
-    </a>
+      <button class="btn-add" id="btn-add" onclick="addMission()">+ Agregar mision</button>
+    </div>
   </div>
 
-  <!-- Zonas críticas -->
-  <div class="section-label">Zonas críticas activas</div>
+  <div class="section-label">Modulos</div>
   <div class="grid">
-    <div class="module-card critical">
-      <div class="mc-icon">🏥</div>
-      <div class="mc-title">Salud & Cuerpo</div>
-      <div class="mc-sub">8 evaluaciones médicas pendientes</div>
-      <span class="mc-badge badge-alert">Score 25 ⚠</span>
-    </div>
-    <div class="module-card critical">
-      <div class="mc-icon">💰</div>
-      <div class="mc-title">Economía</div>
-      <div class="mc-sub">Más baja de la rueda · modo emergencia</div>
-      <span class="mc-badge badge-alert">Score 20 ⚠</span>
-    </div>
-    <div class="module-card critical" style="grid-column:1/-1">
+    <a class="card" href="banco_misiones_real.html">
+      <div class="card-icon">sword</div>
+      <div class="card-title">Banco de misiones</div>
+      <div class="card-sub">34 misiones reales</div>
+      <span class="badge by">11 categorias</span>
+    </a>
+    <div class="card accent wide">
       <div style="display:flex;align-items:center;gap:10px">
-        <div class="mc-icon" style="margin:0">💜</div>
+        <div style="font-size:20px">sheets</div>
         <div>
-          <div class="mc-title">Sexoafectivo</div>
-          <div class="mc-sub">Costo emocional acumulado · terapia como misión central</div>
+          <div class="card-title" style="color:#26215C">Google Sheets conectado</div>
+          <div class="card-sub" style="color:#534AB7">Misiones y stats viven en tu planilla</div>
         </div>
-        <span class="mc-badge badge-alert" style="margin-left:auto;white-space:nowrap">Score 22 ⚠</span>
       </div>
     </div>
   </div>
 
-  <!-- Misión urgente -->
-  <div class="section-label">Próximo hito</div>
-  <div class="module-card" style="border-color:#1D9E75;border-width:1.5px;background:#E1F5EE">
-    <div style="display:flex;align-items:center;gap:10px">
-      <div style="font-size:20px">⚽</div>
-      <div>
-        <div class="mc-title" style="color:#085041">Pichanga con Ale</div>
-        <div class="mc-sub" style="color:#0F6E56">Fin de semana 21 de mayo · +20 XP · no cancelar</div>
-      </div>
-      <span style="margin-left:auto;font-size:18px">→</span>
-    </div>
+  <div class="section-label">Zonas criticas</div>
+  <div class="grid">
+    <div class="card critical"><div class="card-icon">hospital</div><div class="card-title">Salud</div><div class="card-sub">8 evaluaciones pendientes</div><span class="badge ba">25 puntos</span></div>
+    <div class="card critical"><div class="card-icon">dinero</div><div class="card-title">Economia</div><div class="card-sub">Modo emergencia</div><span class="badge ba">20 puntos</span></div>
+    <div class="card critical wide"><div class="card-title">Sexoafectivo</div><div class="card-sub">Terapia como mision central</div><span class="badge ba">22 puntos</span></div>
   </div>
 
-  <div class="footer">dixipixie8 · Polímata Disperso · Sistema pokémonístico de gestión personal</div>
+  <div class="footer">dixipixie8 Sistema pokemonistico de gestion personal</div>
 </div>
+<div class="notif" id="notif"></div>
 
 <script>
-const DAYS = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const SHEET_ID = '1YLw9QhLhoEIwdLG9qG9M7IHdEYwAUk_7ugl2cIAGlik';
+const BASE = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:csv&sheet=';
+
+const CAT_COLORS = {dis_fis:'#1D9E75',salud:'#1D9E75',dis_int:'#7F77DD',trabajo:'#7F77DD',politica:'#7F77DD',familia:'#D4537E',amigos:'#D4537E',sexoafect:'#D4537E',juego:'#EF9F27',arte:'#EF9F27',economia:'#E24B4A'};
+const CAT_NAMES = {dis_fis:'Dis. fisica',salud:'Salud',dis_int:'Dis. intelectual',trabajo:'Trabajo',politica:'Politica',familia:'Familia',amigos:'Amigos',sexoafect:'Sexoafectivo',juego:'Juego',arte:'Arte',economia:'Economia'};
+
+let missions = [];
+let doneMissions = new Set(JSON.parse(localStorage.getItem('done_' + today()) || '[]'));
+let totalXP = parseInt(localStorage.getItem('totalXP') || '460');
+
+function today(){ const d=new Date(); return d.toISOString().split('T')[0]; }
+
+function parseCSV(text){
+  const rows = [];
+  const lines = text.trim().split('\n');
+  lines.forEach(line => {
+    const cols = []; let cur = '', inQ = false;
+    for(let i=0;i<line.length;i++){
+      const c=line[i];
+      if(c==='"'){inQ=!inQ;}
+      else if(c===','&&!inQ){cols.push(cur.trim());cur='';}
+      else{cur+=c;}
+    }
+    cols.push(cur.trim());
+    rows.push(cols);
+  });
+  return rows;
+}
+
+async function loadStats(){
+  try {
+    const r = await fetch(BASE + 'stats');
+    const text = await r.text();
+    const rows = parseCSV(text).slice(1);
+    const stats = {};
+    rows.forEach(row => { if(row[0]) stats[row[0].replace(/"/g,'')] = parseInt(row[1])||0; });
+    const groups = {
+      cuerpo: Math.round((['dis_fis','salud'].reduce((a,c)=>a+(stats[c]||0),0))/2),
+      mente:  Math.round((['dis_int','trabajo','politica'].reduce((a,c)=>a+(stats[c]||0),0))/3),
+      vinculo:Math.round((['familia','amigos','sexoafect'].reduce((a,c)=>a+(stats[c]||0),0))/3),
+      creacion:Math.round((['juego','arte'].reduce((a,c)=>a+(stats[c]||0),0))/2),
+      recursos:stats['economia']||0
+    };
+    Object.keys(groups).forEach(g => {
+      const v = groups[g];
+      const el = document.getElementById('g-'+g);
+      const bar = document.getElementById('gb-'+g);
+      if(el) el.textContent = v;
+      if(bar) bar.style.width = v + '%';
+    });
+    document.getElementById('stats-sync').className = 'sync-ok';
+    document.getElementById('stats-sync').textContent = 'sincronizado';
+  } catch(e) {
+    document.getElementById('stats-sync').className = 'sync-err';
+    document.getElementById('stats-sync').textContent = 'sin conexion';
+  }
+}
+
+async function loadMissions(){
+  try {
+    const r = await fetch(BASE + 'misiones');
+    const text = await r.text();
+    const rows = parseCSV(text).slice(1);
+    const local = JSON.parse(localStorage.getItem('local_missions') || '[]');
+    missions = [
+      ...rows.filter(row => row[0] && row[6] && row[6].replace(/"/g,'').toLowerCase().includes('si'))
+        .map(row => ({id:row[0].replace(/"/g,''),categoria:row[1].replace(/"/g,''),titulo:row[2].replace(/"/g,''),tipo:row[4].replace(/"/g,''),xp:parseInt(row[5])||10})),
+      ...local
+    ];
+    document.getElementById('missions-sync').className = 'sync-ok';
+    document.getElementById('missions-sync').textContent = missions.length + ' misiones';
+  } catch(e) {
+    const local = JSON.parse(localStorage.getItem('local_missions') || '[]');
+    missions = local;
+    document.getElementById('missions-sync').className = 'sync-err';
+    document.getElementById('missions-sync').textContent = 'sin conexion - modo local';
+  }
+  renderMissions();
+}
+
+function renderMissions(){
+  const list = document.getElementById('mission-list');
+  if(missions.length === 0){
+    list.innerHTML = '<div class="loading">Agrega misiones en tu Sheets con activa=si, o usa el formulario de abajo.</div>';
+    updateXPToday(); return;
+  }
+  list.innerHTML = missions.slice(0,10).map(m => {
+    const done = doneMissions.has(m.id);
+    const color = CAT_COLORS[m.categoria] || '#888';
+    return '<div class="mission-row" onclick="toggleMission('' + m.id + '','' + m.titulo.replace(/'/g,"\'") + '',' + m.xp + ')">' +
+      '<div class="m-dot" style="background:' + color + '"></div>' +
+      '<div class="m-check' + (done?' done':'') + '">' + (done?'v':'') + '</div>' +
+      '<div class="m-info"><div class="m-title' + (done?' struck':'') + '">' + m.titulo + '</div>' +
+      '<div class="m-cat">' + (CAT_NAMES[m.categoria]||m.categoria) + ' - ' + m.tipo + '</div></div>' +
+      '<div class="m-xp">+' + m.xp + ' XP</div></div>';
+  }).join('');
+  updateXPToday();
+}
+
+function toggleMission(id, titulo, xp){
+  if(doneMissions.has(id)){ doneMissions.delete(id); totalXP -= xp; showNotif('Reactivada: ' + titulo); }
+  else { doneMissions.add(id); totalXP += xp; showNotif('+' + xp + ' XP - ' + titulo); }
+  localStorage.setItem('done_' + today(), JSON.stringify([...doneMissions]));
+  localStorage.setItem('totalXP', totalXP);
+  updateXPGlobal(); renderMissions();
+}
+
+function updateXPToday(){
+  const xpHoy = missions.filter(m=>doneMissions.has(m.id)).reduce((a,m)=>a+m.xp,0);
+  document.getElementById('xp-today').textContent = xpHoy + ' XP hoy';
+}
+
+function updateXPGlobal(){
+  const pct = Math.min(100, Math.round((totalXP/1000)*100));
+  document.getElementById('xp-fill').style.width = pct + '%';
+  document.getElementById('xp-label').textContent = totalXP + ' / 1000 XP';
+  document.getElementById('level-pill').textContent = 'Nivel ' + Math.floor(totalXP/100);
+}
+
+function addMission(){
+  const title = document.getElementById('new-title').value.trim();
+  if(!title){ showNotif('Escribe el nombre de la mision'); return; }
+  const cat = document.getElementById('new-cat').value;
+  const tipo = document.getElementById('new-tipo').value;
+  const xp = parseInt(document.getElementById('new-xp').value);
+  const newM = {id:'local_'+Date.now(), categoria:cat, titulo:title, tipo:tipo, xp:xp};
+  const local = JSON.parse(localStorage.getItem('local_missions') || '[]');
+  local.push(newM); missions.unshift(newM);
+  localStorage.setItem('local_missions', JSON.stringify(local));
+  document.getElementById('new-title').value = '';
+  showNotif('Mision agregada - recuerda anadirla en Sheets');
+  renderMissions();
+}
+
+function showNotif(msg){
+  const n = document.getElementById('notif');
+  n.textContent = msg; n.classList.add('show');
+  setTimeout(()=>n.classList.remove('show'), 2500);
+}
+
+const DAYS = ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'];
 const MONTHS = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 const now = new Date();
-document.getElementById('day-name').textContent = DAYS[now.getDay()]+', '+now.getDate()+' de '+MONTHS[now.getMonth()];
-const hour = now.getHours();
-const greeting = hour < 12 ? 'Buenos días' : hour < 19 ? 'Buenas tardes' : 'Buenas noches';
-document.getElementById('day-sub').textContent = greeting+' · ¿cuál es el boss del día?';
-</script>
+document.getElementById('day-name').textContent = DAYS[now.getDay()] + ', ' + now.getDate() + ' de ' + MONTHS[now.getMonth()];
+const h = now.getHours();
+document.getElementById('day-sub').textContent = (h<12?'Buenos dias':h<19?'Buenas tardes':'Buenas noches') + ' - cual es el boss del dia?';
 
+updateXPGlobal();
+loadStats();
+loadMissions();
+</script>
 <script>
 if('serviceWorker' in navigator){
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js')
-      .then(r => console.log('SW registrado:', r.scope))
-      .catch(e => console.log('SW error:', e));
-  });
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(e=>console.log(e)));
 }
 </script>
 </body>
