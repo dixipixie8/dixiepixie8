@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ritual diario — dixipixie8</title>
+<meta name="theme-color" content="#7F77DD">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:16px}
+.wrap{max-width:480px;margin:0 auto}
+.topbar{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.back{text-decoration:none;font-size:20px;color:#7F77DD}
+.topbar-title{font-size:17px;font-weight:600;color:#1a1a1a}
+.topbar-sub{font-size:11px;color:#888;margin-top:1px}
+.streak{margin-left:auto;background:#FAEEDA;border-radius:20px;padding:3px 10px;font-size:12px;font-weight:500;color:#412402}
+.card{background:#fff;border-radius:12px;border:0.5px solid #e0e0e0;padding:14px 16px;margin-bottom:10px}
+.card-title{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px}
+.energy-btns{display:flex;gap:6px}
+.ebtn{flex:1;padding:10px 4px;border-radius:8px;border:1.5px solid #e0e0e0;background:transparent;cursor:pointer;font-size:11px;color:#888;text-align:center;transition:all 0.15s}
+.ebtn .eico{font-size:20px;display:block;margin-bottom:3px}
+.ebtn.sel-5{border-color:#1D9E75;background:#E1F5EE;color:#085041}
+.ebtn.sel-4{border-color:#639922;background:#EAF3DE;color:#173404}
+.ebtn.sel-3{border-color:#EF9F27;background:#FAEEDA;color:#412402}
+.ebtn.sel-2{border-color:#D85A30;background:#FAECE7;color:#4A1B0C}
+.ebtn.sel-1{border-color:#E24B4A;background:#FCEBEB;color:#501313}
+.boss-card{background:#fff;border-radius:12px;border-left:3px solid #7F77DD;border-top:0.5px solid #e0e0e0;border-right:0.5px solid #e0e0e0;border-bottom:0.5px solid #e0e0e0;padding:14px 16px;margin-bottom:10px}
+.boss-lbl{font-size:11px;font-weight:600;color:#534AB7;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px}
+.boss-input{width:100%;font-size:15px;font-weight:500;border:none;background:transparent;color:#1a1a1a;font-family:sans-serif;outline:none}
+.boss-hint{font-size:11px;color:#aaa;margin-top:6px}
+.focus-card{background:#EEEDFE;border-radius:12px;padding:12px 16px;margin-bottom:10px}
+.focus-lbl{font-size:11px;font-weight:600;color:#534AB7;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px}
+.focus-txt{font-size:13px;color:#26215C;line-height:1.6}
+.timer-card{background:#fff;border-radius:12px;border:0.5px solid #e0e0e0;padding:14px 16px;margin-bottom:10px}
+.timer-presets{display:flex;gap:5px;justify-content:center;margin-bottom:10px}
+.preset{padding:4px 12px;border-radius:10px;font-size:11px;cursor:pointer;border:0.5px solid #ddd;background:transparent;color:#888;transition:all 0.12s}
+.preset.on{background:#EEEDFE;border-color:#7F77DD;color:#3C3489;font-weight:500}
+.timer-display{font-size:40px;font-weight:500;color:#1a1a1a;text-align:center;font-variant-numeric:tabular-nums;margin-bottom:8px}
+.timer-bar-wrap{height:4px;background:#eee;border-radius:2px;margin-bottom:12px;overflow:hidden}
+.timer-bar-fill{height:100%;background:#7F77DD;border-radius:2px;transition:width 1s linear}
+.timer-btns{display:flex;gap:8px;justify-content:center}
+.tbtn{padding:8px 20px;border-radius:8px;border:0.5px solid #ddd;background:transparent;color:#1a1a1a;font-size:12px;cursor:pointer;transition:all 0.15s}
+.tbtn.primary{background:#7F77DD;border-color:#7F77DD;color:white}
+.stats-footer{display:flex;gap:8px;margin-bottom:10px}
+.sf{flex:1;background:#fff;border-radius:10px;border:0.5px solid #e0e0e0;padding:10px;text-align:center}
+.sf-num{font-size:20px;font-weight:600;color:#1a1a1a}
+.sf-lbl{font-size:10px;color:#888;margin-top:2px}
+.seal-btn{width:100%;padding:13px;border-radius:12px;background:#7F77DD;color:white;border:none;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:10px;transition:opacity 0.15s}
+.seal-btn:disabled{opacity:0.35;cursor:default}
+.seal-btn:hover:not(:disabled){opacity:0.88}
+.sealed{background:#fff;border-radius:12px;border:0.5px solid #1D9E75;padding:20px;text-align:center;display:none}
+.notif{position:fixed;bottom:16px;left:50%;transform:translateX(-50%) translateY(10px);background:#1D9E75;color:white;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:500;opacity:0;transition:all 0.3s;pointer-events:none;z-index:99;white-space:nowrap}
+.notif.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">&#8592;</a>
+    <div>
+      <div class="topbar-title">Ritual diario &#9728;</div>
+      <div class="topbar-sub" id="fecha"></div>
+    </div>
+    <div class="streak">&#128293; <span id="streak">3</span> dias</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Energia de hoy</div>
+    <div class="energy-btns">
+      <button class="ebtn" onclick="setEnergy(1,this)"><span class="eico">&#128267;</span>Muerto</button>
+      <button class="ebtn" onclick="setEnergy(2,this)"><span class="eico">&#128564;</span>Bajo</button>
+      <button class="ebtn" onclick="setEnergy(3,this)"><span class="eico">&#128528;</span>Regular</button>
+      <button class="ebtn" onclick="setEnergy(4,this)"><span class="eico">&#9889;</span>Bien</button>
+      <button class="ebtn" onclick="setEnergy(5,this)"><span class="eico">&#128293;</span>Lleno</button>
+    </div>
+  </div>
+
+  <div class="boss-card">
+    <div class="boss-lbl">Boss del dia</div>
+    <input class="boss-input" id="boss" placeholder="que cosa, si la haces, hace que el dia valga la pena?" oninput="checkSeal()"/>
+    <div class="boss-hint">una sola cosa - si dudas entre dos, elige la que mas te da miedo</div>
+  </div>
+
+  <div class="focus-card" id="focus-card">
+    <div class="focus-lbl">Modo de hoy</div>
+    <div class="focus-txt" id="focus-txt">Selecciona tu nivel de energia para ver el modo recomendado.</div>
+  </div>
+
+  <div class="timer-card">
+    <div class="card-title" style="margin-bottom:8px">Temporizador de foco &nbsp;<span id="pomo-count" style="font-size:10px;color:#aaa;text-transform:none;letter-spacing:0">0 pomodoros</span></div>
+    <div class="timer-presets">
+      <button class="preset on" onclick="setPreset(25,this)">25 min</button>
+      <button class="preset" onclick="setPreset(15,this)">15 min</button>
+      <button class="preset" onclick="setPreset(5,this)">5 min</button>
+      <button class="preset" onclick="setPreset(50,this)">50 min</button>
+    </div>
+    <div class="timer-display" id="timer-display">25:00</div>
+    <div class="timer-bar-wrap"><div class="timer-bar-fill" id="timer-bar" style="width:100%"></div></div>
+    <div class="timer-btns">
+      <button class="tbtn primary" id="tbtn-start" onclick="toggleTimer()">Iniciar</button>
+      <button class="tbtn" onclick="resetTimer()">Reiniciar</button>
+    </div>
+  </div>
+
+  <div class="stats-footer">
+    <div class="sf"><div class="sf-num" id="sf-done">0</div><div class="sf-lbl">misiones hoy</div></div>
+    <div class="sf"><div class="sf-num" id="sf-xp">0</div><div class="sf-lbl">XP del dia</div></div>
+    <div class="sf"><div class="sf-num" id="sf-pomo">0</div><div class="sf-lbl">pomodoros</div></div>
+  </div>
+
+  <button class="seal-btn" id="seal-btn" onclick="sealDay()" disabled>Sellar el dia &#127769;</button>
+
+  <div class="sealed" id="sealed">
+    <div style="font-size:36px;margin-bottom:8px">&#127769;</div>
+    <div style="font-size:16px;font-weight:600;color:#1a1a1a">Dia sellado</div>
+    <div style="font-size:12px;color:#888;margin-top:4px" id="sealed-msg"></div>
+  </div>
+</div>
+<div class="notif" id="notif"></div>
+<script>
+var MODES = {
+  1:'Modo supervivencia - haz solo el boss del dia. Una sola cosa. Permitete existir.',
+  2:'Modo mantenimiento - boss + una mision pequeña. Nada nuevo, no te endeudes.',
+  3:'Modo estable - boss + 2 misiones. Puedes avanzar pero sin sprint.',
+  4:'Modo ofensiva - boss + misiones + avanza en la quest semanal. Hoy puedes mas.',
+  5:'Modo legendario - dia de ataque. Boss, misiones, quest y algo extra. Capitaliza este estado.'
+};
+var energy=0, presetMins=25, timerSecs=25*60, timerTotal=25*60, timerRunning=false, timerInterval=null, pomodoros=0, sealed=false;
+
+function todayKey(){ return new Date().toISOString().split('T')[0]; }
+
+var now=new Date();
+var DAYS=['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'];
+var MONTHS=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+document.getElementById('fecha').textContent=DAYS[now.getDay()]+', '+now.getDate()+' de '+MONTHS[now.getMonth()];
+
+function setEnergy(v,btn){
+  energy=v;
+  document.querySelectorAll('.ebtn').forEach(function(b){ b.className='ebtn'; });
+  btn.classList.add('sel-'+v);
+  document.getElementById('focus-txt').textContent=MODES[v];
+  checkSeal();
+}
+
+function checkSeal(){
+  var hasBoss=document.getElementById('boss').value.trim().length>0;
+  var hasDone=parseInt(document.getElementById('sf-done').textContent)>0;
+  document.getElementById('seal-btn').disabled=!(energy>0&&hasBoss&&(hasDone||pomodoros>0));
+}
+
+function setPreset(min,btn){
+  presetMins=min;
+  document.querySelectorAll('.preset').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+  if(!timerRunning){ timerSecs=min*60; timerTotal=min*60; updateTimerDisplay(); }
+}
+
+function toggleTimer(){
+  if(timerRunning){
+    clearInterval(timerInterval); timerRunning=false;
+    document.getElementById('tbtn-start').textContent='Reanudar';
+  } else {
+    timerRunning=true;
+    document.getElementById('tbtn-start').textContent='Pausar';
+    timerInterval=setInterval(function(){
+      timerSecs--;
+      if(timerSecs<=0){
+        clearInterval(timerInterval); timerRunning=false;
+        pomodoros++;
+        document.getElementById('pomo-count').textContent=pomodoros+' pomodoro'+(pomodoros!==1?'s':'');
+        document.getElementById('sf-pomo').textContent=pomodoros;
+        document.getElementById('tbtn-start').textContent='Iniciar';
+        timerSecs=presetMins*60; timerTotal=presetMins*60;
+        notify('+20 XP pomodoro completado!');
+        checkSeal();
+      }
+      updateTimerDisplay();
+    },1000);
+  }
+}
+
+function resetTimer(){
+  clearInterval(timerInterval); timerRunning=false;
+  timerSecs=presetMins*60; timerTotal=presetMins*60;
+  document.getElementById('tbtn-start').textContent='Iniciar';
+  updateTimerDisplay();
+}
+
+function updateTimerDisplay(){
+  var m=Math.floor(timerSecs/60), s=timerSecs%60;
+  document.getElementById('timer-display').textContent=pad(m)+':'+pad(s);
+  document.getElementById('timer-bar').style.width=Math.round((timerSecs/timerTotal)*100)+'%';
+}
+
+function pad(n){ return n.toString().padStart(2,'0'); }
+
+function sealDay(){
+  if(sealed) return;
+  sealed=true;
+  var boss=document.getElementById('boss').value.trim();
+  var xp=parseInt(document.getElementById('sf-xp').textContent)||0;
+  var done=parseInt(document.getElementById('sf-done').textContent)||0;
+  document.getElementById('seal-btn').style.display='none';
+  document.getElementById('sealed').style.display='block';
+  document.getElementById('sealed-msg').textContent=done+' misiones - '+xp+' XP - boss: '+boss;
+  document.getElementById('streak').textContent=parseInt(document.getElementById('streak').textContent)+1;
+  notify('+50 XP bonus por sellar el dia!');
+  var totalXP=parseInt(localStorage.getItem('totalXP')||'460')+50;
+  localStorage.setItem('totalXP',totalXP);
+}
+
+function notify(msg){
+  var n=document.getElementById('notif');
+  n.textContent=msg; n.classList.add('show');
+  setTimeout(function(){ n.classList.remove('show'); },2500);
+}
+
+// Cargar misiones completadas del dia
+var done=JSON.parse(localStorage.getItem('done_'+todayKey())||'[]');
+document.getElementById('sf-done').textContent=done.length;
+</script>
+</body>
+</html>

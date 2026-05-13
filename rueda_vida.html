@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rueda de la vida — dixipixie8</title>
+<meta name="theme-color" content="#7F77DD">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:16px}
+.wrap{max-width:480px;margin:0 auto}
+.topbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.back{text-decoration:none;font-size:20px;color:#7F77DD}
+.topbar-title{font-size:17px;font-weight:600;color:#1a1a1a}
+.topbar-sub{font-size:11px;color:#888;margin-top:1px}
+.wheel-wrap{display:flex;justify-content:center;margin-bottom:14px}
+.legend{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:12px}
+.leg-item{background:#fff;border-radius:8px;border:0.5px solid #e0e0e0;padding:8px 6px;cursor:pointer;text-align:center}
+.leg-dot{width:8px;height:8px;border-radius:50%;margin:0 auto 3px}
+.leg-name{font-size:10px;font-weight:500;color:#1a1a1a}
+.leg-avg{font-size:10px;color:#888}
+.detail{background:#fff;border-radius:12px;border:0.5px solid #e0e0e0;padding:14px 16px;margin-bottom:10px;min-height:120px}
+.detail-hint{font-size:12px;color:#aaa;text-align:center;padding:20px 0}
+.det-header{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.det-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.det-title{font-size:14px;font-weight:600;color:#1a1a1a;flex:1}
+.det-score{font-size:12px;color:#888}
+.det-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.det-bar-lbl{font-size:11px;color:#888;width:100px;flex-shrink:0}
+.det-bar-wrap{flex:1;height:5px;background:#eee;border-radius:3px;overflow:hidden}
+.det-bar-fill{height:100%;border-radius:3px;transition:width 0.4s}
+.det-bar-val{font-size:11px;font-weight:500;color:#1a1a1a;width:24px;text-align:right;flex-shrink:0}
+.adj-row{display:flex;align-items:center;gap:6px;margin-top:10px}
+.adj-lbl{font-size:11px;color:#888}
+.adj-btn{padding:4px 10px;border-radius:6px;border:0.5px solid #ddd;background:transparent;color:#888;font-size:11px;cursor:pointer;transition:all 0.12s}
+.adj-btn.up{border-color:#1D9E75;color:#085041}
+.adj-btn.dn{border-color:#E24B4A;color:#791F1F}
+.insight{border-left:2.5px solid #EF9F27;padding:9px 13px;background:#FAEEDA;border-radius:0 8px 8px 0;font-size:12px;color:#412402;line-height:1.6;margin-bottom:10px}
+.global-bar{background:#fff;border-radius:10px;border:0.5px solid #e0e0e0;padding:10px 14px;display:flex;align-items:center;gap:12px}
+.gb-lbl{font-size:11px;color:#888}
+.gb-wrap{flex:1;height:5px;background:#eee;border-radius:3px;overflow:hidden}
+.gb-fill{height:100%;background:#7F77DD;border-radius:3px;transition:width 0.4s}
+.gb-val{font-size:12px;font-weight:500;color:#1a1a1a;min-width:36px;text-align:right}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">&#8592;</a>
+    <div>
+      <div class="topbar-title">Rueda de la vida &#127919;</div>
+      <div class="topbar-sub">11 categorias - haz click en un segmento</div>
+    </div>
+  </div>
+
+  <div class="wheel-wrap">
+    <svg id="wheel" width="300" height="300" viewBox="-150 -150 300 300" style="cursor:pointer"></svg>
+  </div>
+
+  <div class="legend" id="legend"></div>
+  <div class="detail" id="detail"><div class="detail-hint">Toca un segmento o grupo para ver el detalle y ajustar</div></div>
+  <div class="insight" id="insight">Selecciona una categoria para ver el diagnostico.</div>
+  <div class="global-bar">
+    <span class="gb-lbl">Promedio global</span>
+    <div class="gb-wrap"><div class="gb-fill" id="gb-fill"></div></div>
+    <span class="gb-val" id="gb-val">--</span>
+  </div>
+</div>
+
+<script>
+var GROUPS=[
+  {id:'cuerpo',name:'Cuerpo',color:'#1D9E75',light:'#E1F5EE',dark:'#085041',
+   cats:[{id:'dis_fis',name:'Dis. fisica',abandoned:false},{id:'salud',name:'Salud fisica',abandoned:true},{id:'alim',name:'Alimentacion',abandoned:false}]},
+  {id:'mente',name:'Mente',color:'#7F77DD',light:'#EEEDFE',dark:'#3C3489',
+   cats:[{id:'dis_int',name:'Dis. intelectual',abandoned:false},{id:'trabajo',name:'Trabajo',abandoned:false},{id:'politica',name:'Politica',abandoned:false}]},
+  {id:'vinculo',name:'Vinculo',color:'#D4537E',light:'#FBEAF0',dark:'#72243E',
+   cats:[{id:'familia',name:'Familia',abandoned:false},{id:'amigos',name:'Amigos',abandoned:false},{id:'sexoafect',name:'Sexoafectivo',abandoned:true}]},
+  {id:'creacion',name:'Creacion',color:'#EF9F27',light:'#FAEEDA',dark:'#633806',
+   cats:[{id:'arte',name:'Arte',abandoned:false},{id:'juego',name:'Juego',abandoned:false}]},
+  {id:'recursos',name:'Recursos',color:'#E24B4A',light:'#FCEBEB',dark:'#791F1F',
+   cats:[{id:'economia',name:'Economia',abandoned:true}]},
+];
+
+var DEFAULTS={dis_fis:40,salud:25,dis_int:78,trabajo:85,politica:60,familia:52,amigos:48,sexoafect:22,juego:55,arte:38,economia:20,alim:45};
+var INSIGHTS={
+  cuerpo:'Cuerpo tiene Salud en zona critica. Sin energia fisica, todo lo demas se vuelve mas dificil.',
+  mente:'Mente es tu zona de hiperfoco. Trabajo en 85 desplaza todo lo demas automaticamente.',
+  vinculo:'Sexoafectivo en 22 es la herida mas silenciosa. Las relaciones profundas son lo primero que se sacrifica.',
+  creacion:'Arte en 38 - presente pero no alimentado. Crear recarga de una manera que consumir no puede reemplazar.',
+  recursos:'Economia en 20, la mas baja de la rueda. Opera en modo emergencia hasta que deja de funcionar.',
+};
+var CAT_INSIGHTS={
+  dis_fis:'Reacondicionamiento post-cirugia. Sentadillas matutinas como base, ir escalando.',
+  salud:'Zona critica real. 8 evaluaciones medicas pendientes. Empezar por agendar una.',
+  alim:'Alimentacion sostenida pero sin estructura. Un batch semanal puede cambiar esto.',
+  dis_int:'Alta y bien usada. Riesgo: se vuelve refugio para no atender areas bajas.',
+  trabajo:'La categoria que mueve todo - para bien y para mal. ¿Estas eligiendo esto o es inercia?',
+  politica:'Interes activo. Cuidado con que el consumo reemplace accion.',
+  familia:'Nivel medio. Revisar si hay deuda acumulada que no se nombra.',
+  amigos:'Las amistades se degradan silenciosamente. ¿Cuando iniciaste tu el ultimo contacto?',
+  sexoafect:'La mas abandonada de Vinculo. Costo emocional acumulado que se paga tarde.',
+  arte:'Arte en 38. Crear recarga - no crearlo drena aunque no lo notes.',
+  juego:'Juego en 55 es sano. El descanso activo no es flojera, es mantenimiento.',
+  economia:'La mas baja de toda la rueda. Una revision semanal de 30 min cambia el patron.',
+};
+
+function getScore(id){ return parseInt(localStorage.getItem('score_'+id)||DEFAULTS[id]||50); }
+function setScore(id,v){ localStorage.setItem('score_'+id,Math.max(0,Math.min(100,v))); }
+
+function allCats(){
+  var cats=[];
+  GROUPS.forEach(function(g){ g.cats.forEach(function(c){ cats.push({g:g,c:c}); }); });
+  return cats;
+}
+
+function buildWheel(){
+  var svg=document.getElementById('wheel');
+  svg.innerHTML='';
+  var all=allCats(), total=all.length, step=(2*Math.PI)/total, RM=115, Rm=14;
+  all.forEach(function(item,i){
+    var g=item.g, c=item.c;
+    var score=getScore(c.id);
+    var sa=i*step-Math.PI/2+0.03, ea=(i+1)*step-Math.PI/2-0.03, mid=(sa+ea)/2;
+    var r=Rm+(score/100)*(RM-Rm);
+    var fill=c.abandoned?'#E24B4A':g.color;
+    var bg=makePath(sa,ea,RM,Rm);
+    var bge=makeSVG('path'); bge.setAttribute('d',bg); bge.setAttribute('fill',g.light); bge.setAttribute('opacity','0.4'); bge.setAttribute('pointer-events','none');
+    svg.appendChild(bge);
+    var vp=makePath(sa,ea,r,Rm);
+    var ve=makeSVG('path'); ve.setAttribute('d',vp); ve.setAttribute('fill',fill); ve.setAttribute('opacity','0.9');
+    ve.setAttribute('stroke','#f5f4f0'); ve.setAttribute('stroke-width','1.5');
+    ve.style.cursor='pointer';
+    (function(grp,cat){ ve.addEventListener('click',function(){ selectCat(grp,cat); }); })(g,c);
+    svg.appendChild(ve);
+    if(r>40){
+      var lx=Math.cos(mid)*(r-14), ly=Math.sin(mid)*(r-14);
+      var lbl=makeSVG('text'); lbl.setAttribute('x',lx); lbl.setAttribute('y',ly);
+      lbl.setAttribute('text-anchor','middle'); lbl.setAttribute('dominant-baseline','central');
+      lbl.setAttribute('font-size','7'); lbl.setAttribute('font-weight','500');
+      lbl.setAttribute('fill','white'); lbl.setAttribute('pointer-events','none');
+      lbl.textContent=c.name.split(' ')[0];
+      svg.appendChild(lbl);
+    }
+  });
+  [25,50,75].forEach(function(p){
+    var rr=Rm+(p/100)*(RM-Rm);
+    var rc=makeSVG('circle'); rc.setAttribute('cx','0'); rc.setAttribute('cy','0'); rc.setAttribute('r',rr);
+    rc.setAttribute('fill','none'); rc.setAttribute('stroke','#f5f4f0'); rc.setAttribute('stroke-width','0.8'); rc.setAttribute('pointer-events','none');
+    svg.appendChild(rc);
+  });
+  var cc=makeSVG('circle'); cc.setAttribute('cx','0'); cc.setAttribute('cy','0'); cc.setAttribute('r',Rm-1);
+  cc.setAttribute('fill','#fff'); cc.setAttribute('stroke','#e0e0e0'); cc.setAttribute('stroke-width','0.5');
+  svg.appendChild(cc);
+  var ct=makeSVG('text'); ct.setAttribute('x','0'); ct.setAttribute('y','0');
+  ct.setAttribute('text-anchor','middle'); ct.setAttribute('dominant-baseline','central');
+  ct.setAttribute('font-size','7'); ct.setAttribute('font-weight','500'); ct.setAttribute('fill','#888');
+  ct.textContent='YO'; svg.appendChild(ct);
+  updateGlobal();
+}
+
+function makePath(sa,ea,rO,rI){
+  var x1=Math.cos(sa)*rO,y1=Math.sin(sa)*rO,x2=Math.cos(ea)*rO,y2=Math.sin(ea)*rO;
+  var x3=Math.cos(ea)*rI,y3=Math.sin(ea)*rI,x4=Math.cos(sa)*rI,y4=Math.sin(sa)*rI;
+  return 'M'+x4+','+y4+' L'+x1+','+y1+' A'+rO+','+rO+' 0 0,1 '+x2+','+y2+' L'+x3+','+y3+' A'+rI+','+rI+' 0 0,0 '+x4+','+y4+' Z';
+}
+
+function makeSVG(tag){ return document.createElementNS('http://www.w3.org/2000/svg',tag); }
+
+function buildLegend(){
+  var leg=document.getElementById('legend');
+  leg.innerHTML='';
+  GROUPS.forEach(function(g){
+    var avg=Math.round(g.cats.reduce(function(a,c){ return a+getScore(c.id); },0)/g.cats.length);
+    var item=document.createElement('div');
+    item.className='leg-item';
+    item.innerHTML='<div class="leg-dot" style="background:'+g.color+'"></div>'
+      +'<div class="leg-name">'+g.name+'</div>'
+      +'<div class="leg-avg">'+avg+'/100</div>';
+    item.addEventListener('click',function(){ selectGroup(g); });
+    leg.appendChild(item);
+  });
+}
+
+function selectGroup(g){
+  var avg=Math.round(g.cats.reduce(function(a,c){ return a+getScore(c.id); },0)/g.cats.length);
+  var html='<div class="det-header"><div class="det-dot" style="background:'+g.color+'"></div>'
+    +'<div class="det-title">'+g.name+'</div><div class="det-score">Promedio: '+avg+'/100</div></div>';
+  g.cats.forEach(function(c){
+    var s=getScore(c.id);
+    html+='<div class="det-bar-row" style="cursor:pointer" onclick="selectCat(GROUPS.find(function(x){return x.id===\''+g.id+'\';}),GROUPS.find(function(x){return x.id===\''+g.id+'\';}).cats.find(function(x){return x.id===\''+c.id+'\';}));">'
+      +'<span class="det-bar-lbl">'+c.name+(c.abandoned?' ⚠':'')+'</span>'
+      +'<div class="det-bar-wrap"><div class="det-bar-fill" style="width:'+s+'%;background:'+(c.abandoned?'#E24B4A':g.color)+'"></div></div>'
+      +'<span class="det-bar-val">'+s+'</span></div>';
+  });
+  document.getElementById('detail').innerHTML=html;
+  document.getElementById('insight').textContent=INSIGHTS[g.id]||'';
+}
+
+function selectCat(g,c){
+  var s=getScore(c.id);
+  var gavg=Math.round(g.cats.reduce(function(a,x){ return a+getScore(x.id); },0)/g.cats.length);
+  var tag=c.abandoned?'zona critica':s>=70?'zona fuerte':'en desarrollo';
+  var tagColor=c.abandoned?'#FCEBEB':s>=70?'#E1F5EE':'#FAEEDA';
+  var tagText=c.abandoned?'#791F1F':s>=70?'#085041':'#412402';
+  var html='<div class="det-header"><div class="det-dot" style="background:'+(c.abandoned?'#E24B4A':g.color)+'"></div>'
+    +'<div class="det-title">'+c.name+'</div>'
+    +'<div class="det-score" style="background:'+tagColor+';color:'+tagText+';padding:2px 7px;border-radius:6px;font-size:10px;font-weight:500">'+tag+'</div></div>'
+    +'<div class="det-bar-row"><span class="det-bar-lbl">Nivel actual</span>'
+    +'<div class="det-bar-wrap"><div class="det-bar-fill" id="cat-bar" style="width:'+s+'%;background:'+(c.abandoned?'#E24B4A':g.color)+'"></div></div>'
+    +'<span class="det-bar-val" id="cat-val">'+s+'</span></div>'
+    +'<div class="det-bar-row"><span class="det-bar-lbl">Promedio grupo</span>'
+    +'<div class="det-bar-wrap"><div class="det-bar-fill" style="width:'+gavg+'%;background:'+g.color+';opacity:0.35"></div></div>'
+    +'<span class="det-bar-val">'+gavg+'</span></div>'
+    +'<div class="adj-row"><span class="adj-lbl">Ajustar:</span>'
+    +'<button class="adj-btn dn" onclick="adjCat(\''+g.id+'\',\''+c.id+'\',\''+g.color+'\','+(c.abandoned?1:0)+',-10)">-10</button>'
+    +'<button class="adj-btn dn" onclick="adjCat(\''+g.id+'\',\''+c.id+'\',\''+g.color+'\','+(c.abandoned?1:0)+',-5)">-5</button>'
+    +'<button class="adj-btn up" onclick="adjCat(\''+g.id+'\',\''+c.id+'\',\''+g.color+'\','+(c.abandoned?1:0)+',+5)">+5</button>'
+    +'<button class="adj-btn up" onclick="adjCat(\''+g.id+'\',\''+c.id+'\',\''+g.color+'\','+(c.abandoned?1:0)+',+10)">+10</button>'
+    +'</div>';
+  document.getElementById('detail').innerHTML=html;
+  document.getElementById('insight').textContent=CAT_INSIGHTS[c.id]||'';
+}
+
+function adjCat(gid,cid,color,isAbandoned,delta){
+  var s=Math.max(0,Math.min(100,getScore(cid)+delta));
+  setScore(cid,s);
+  var bar=document.getElementById('cat-bar');
+  var val=document.getElementById('cat-val');
+  if(bar){ bar.style.width=s+'%'; bar.style.background=isAbandoned?'#E24B4A':color; }
+  if(val) val.textContent=s;
+  buildWheel(); buildLegend(); updateGlobal();
+}
+
+function updateGlobal(){
+  var all=allCats();
+  var avg=Math.round(all.reduce(function(a,item){ return a+getScore(item.c.id); },0)/all.length);
+  document.getElementById('gb-fill').style.width=avg+'%';
+  document.getElementById('gb-val').textContent=avg+'/100';
+}
+
+// Exponer GROUPS globalmente para los onclick en selectCat
+window.GROUPS=GROUPS;
+
+buildWheel();
+buildLegend();
+</script>
+</body>
+</html>

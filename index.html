@@ -139,6 +139,21 @@ body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:16px}
   </div>
   <div class="slbl">Modulos</div>
   <div class="grid">
+    <a class="card" href="ritual_diario.html">
+      <div class="ct">&#9728; Ritual diario</div>
+      <div class="cs">Check-in, boss del dia, pomodoro</div>
+      <span class="badge" style="background:#EEEDFE;color:#3C3489">5 min - manana</span>
+    </a>
+    <a class="card" href="centro_pokemon.html">
+      <div class="ct">&#127973; Centro Pokemon</div>
+      <div class="cs">Revision semanal - 6 fases</div>
+      <span class="badge" style="background:#E1F5EE;color:#085041">Domingos</span>
+    </a>
+    <a class="card" href="rueda_vida.html">
+      <div class="ct">&#127919; Rueda de la vida</div>
+      <div class="cs">11 categorias - scores ajustables</div>
+      <span class="badge" style="background:#EEEDFE;color:#3C3489">Promedio: 47</span>
+    </a>
     <a class="card" href="banco_misiones_real.html">
       <div class="ct">&#9876; Banco de misiones</div>
       <div class="cs">68 misiones en 11 categorias</div>
@@ -175,7 +190,7 @@ function loadStats(){
       var s={};
       j.data.forEach(function(row){ s[row.categoria]=parseInt(row.score)||0; });
       var groups={
-        cuerpo:  Math.round((s.dis_fis||0+s.salud||0)/2),
+        cuerpo:  Math.round(((s.dis_fis||0)+(s.salud||0))/2),
         mente:   Math.round(((s.dis_int||0)+(s.trabajo||0)+(s.politica||0))/3),
         vinculo: Math.round(((s.familia||0)+(s.amigos||0)+(s.sexoafect||0))/3),
         creacion:Math.round(((s.juego||0)+(s.arte||0))/2),
