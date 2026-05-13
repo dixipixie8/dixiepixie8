@@ -1,11 +1,11 @@
 const CACHE = 'dixipixie8-v1';
 const FILES = [
-  '/dixipixie8/',
-  '/dixipixie8/index.html',
-  '/dixipixie8/banco_misiones_real.html',
-  '/dixipixie8/manifest.json',
-  '/dixipixie8/icon-192.png',
-  '/dixipixie8/icon-512.png'
+  '/dixiepixie8/',
+  '/dixiepixie8/index.html',
+  '/dixiepixie8/banco_misiones_real.html',
+  '/dixiepixie8/manifest.json',
+  '/dixiepixie8/icon-192.png',
+  '/dixiepixie8/icon-512.png'
 ];
 
 self.addEventListener('install', e => {
@@ -22,6 +22,6 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => caches.match('/dixipixie8/index.html')))
+    caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => caches.match('/dixiepixie8/index.html')))
   );
 });
