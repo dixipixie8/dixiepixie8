@@ -52,6 +52,9 @@ body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:16px}
 .mcat{font-size:10px;color:#aaa;margin-top:1px}
 .mxp{font-size:10px;color:#aaa;font-weight:500;flex-shrink:0}
 .mdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.mcal{font-size:16px;background:none;border:none;cursor:pointer;padding:2px 4px;opacity:0.5;transition:opacity 0.15s;flex-shrink:0}
+.mcal:hover{opacity:1}
+
 .aform{background:#f5f4f0;border-radius:10px;padding:12px;margin-top:10px}
 .aform input,.aform select{width:100%;padding:7px 10px;border-radius:8px;border:0.5px solid #ddd;background:#fff;color:#1a1a1a;font-size:12px;margin-bottom:6px;font-family:sans-serif}
 .arow{display:flex;gap:6px}
@@ -234,7 +237,16 @@ function renderMissions(){
       +'<div class="mchk'+(d?' done':'')+'">'+( d?'&#10003;':'')+'</div>'
       +'<div class="minf"><div class="mtit'+(d?' struck':'')+'">'+m.titulo+'</div>'
       +'<div class="mcat">'+nm+' &middot; '+m.tipo+'</div></div>'
-      +'<div class="mxp">+'+m.xp+' XP</div>';
+      +'<div class="mxp">+'+m.xp+' XP</div>'
+      +'<button class="mcal" title="Agendar en Calendar">&#128197;</button>';
+    row.querySelector('.mchk').addEventListener('click', function(e){
+      e.stopPropagation();
+      toggleM(m.id, m.titulo, m.xp);
+    });
+    row.querySelector('.mcal').addEventListener('click', function(e){
+      e.stopPropagation();
+      agendar(m.titulo, m.tipo, m.categoria);
+    });
     row.addEventListener('click', function(){
       toggleM(m.id, m.titulo, m.xp);
     });
@@ -274,6 +286,35 @@ function addMission(){
   document.getElementById('ntitle').value='';
   notify('Mision agregada');
   renderMissions();
+}
+
+
+function agendar(titulo, tipo, categoria) {
+  var duraciones = {daily: 30, weekly: 60, quest: 120};
+  var mins = duraciones[tipo] || 30;
+  var now = new Date();
+  // Redondear a la siguiente hora
+  now.setMinutes(0, 0, 0);
+  now.setHours(now.getHours() + 1);
+  var pad = function(n){ return n.toString().padStart(2,'0'); };
+  var fmt = function(d){
+    return d.getFullYear().toString()
+      + pad(d.getMonth()+1)
+      + pad(d.getDate())
+      + 'T' + pad(d.getHours())
+      + pad(d.getMinutes()) + '00';
+  };
+  var start = fmt(now);
+  var end = new Date(now.getTime() + mins*60000);
+  var endStr = fmt(end);
+  var catNames = {dis_fis:'Disciplina fisica',salud:'Salud',dis_int:'Disciplina intelectual',trabajo:'Trabajo',politica:'Politica',familia:'Familia',amigos:'Amigos',sexoafect:'Sexoafectivo',juego:'Juego',arte:'Arte',economia:'Economia'};
+  var desc = 'Mision del sistema dixipixie8 - Categoria: ' + (catNames[categoria]||categoria) + ' - Tipo: ' + tipo;
+  var url = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+    + '&text=' + encodeURIComponent('[dixipixie8] ' + titulo)
+    + '&dates=' + start + '/' + endStr
+    + '&details=' + encodeURIComponent(desc)
+    + '&sf=true&output=xml';
+  window.open(url, '_blank');
 }
 
 function notify(msg){
