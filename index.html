@@ -179,8 +179,7 @@ body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:16px}
 <div class="notif" id="notif"></div>
 
 <script>
-const SHEET_ID = '1YLw9QhLhoEIwdLG9qG9M7IHdEYwAUk_7ugl2cIAGlik';
-const BASE = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/gviz/tq?tqx=out:csv&sheet=';
+const API = 'https://script.google.com/macros/s/AKfycbxD6ySR5Wqjzne5sFnk11vqsPjr3sj6STG7X2MCGxQx8g6QcuaCmddpc9uTjnAzVKE/exec';
 
 const CAT_COLORS = {dis_fis:'#1D9E75',salud:'#1D9E75',dis_int:'#7F77DD',trabajo:'#7F77DD',politica:'#7F77DD',familia:'#D4537E',amigos:'#D4537E',sexoafect:'#D4537E',juego:'#EF9F27',arte:'#EF9F27',economia:'#E24B4A'};
 const CAT_NAMES = {dis_fis:'Dis. fisica',salud:'Salud',dis_int:'Dis. intelectual',trabajo:'Trabajo',politica:'Politica',familia:'Familia',amigos:'Amigos',sexoafect:'Sexoafectivo',juego:'Juego',arte:'Arte',economia:'Economia'};
@@ -210,11 +209,10 @@ function parseCSV(text){
 
 async function loadStats(){
   try {
-    const r = await fetch(BASE + 'stats');
-    const text = await r.text();
-    const rows = parseCSV(text).slice(1);
+    const r = await fetch(API + '?sheet=stats');
+    const json = await r.json();
     const stats = {};
-    rows.forEach(row => { if(row[0]) stats[row[0].replace(/"/g,'')] = parseInt(row[1])||0; });
+    json.data.forEach(row => { if(row.categoria) stats[row.categoria] = parseInt(row.score)||0; });
     const groups = {
       cuerpo: Math.round((['dis_fis','salud'].reduce((a,c)=>a+(stats[c]||0),0))/2),
       mente:  Math.round((['dis_int','trabajo','politica'].reduce((a,c)=>a+(stats[c]||0),0))/3),
@@ -239,13 +237,13 @@ async function loadStats(){
 
 async function loadMissions(){
   try {
-    const r = await fetch(BASE + 'misiones');
-    const text = await r.text();
-    const rows = parseCSV(text).slice(1);
+    const r = await fetch(API + '?sheet=misiones');
+    const json = await r.json();
     const local = JSON.parse(localStorage.getItem('local_missions') || '[]');
     missions = [
-      ...rows.filter(row => row[0] && row[6] && row[6].replace(/"/g,'').toLowerCase().includes('si'))
-        .map(row => ({id:row[0].replace(/"/g,''),categoria:row[1].replace(/"/g,''),titulo:row[2].replace(/"/g,''),tipo:row[4].replace(/"/g,''),xp:parseInt(row[5])||10})),
+      ...json.data
+        .filter(row => row.activa && row.activa.toString().toLowerCase().includes('si'))
+        .map(row => ({id:row.id.toString(),categoria:row.categoria,titulo:row.titulo,tipo:row.tipo,xp:parseInt(row.xp)||10})),
       ...local
     ];
     document.getElementById('missions-sync').className = 'sync-ok';
