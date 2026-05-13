@@ -63,7 +63,6 @@ body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:16px}
 .card.wide{grid-column:1/-1}
 .card.critical{border-color:#E24B4A;border-width:1.5px}
 .card.accent{background:#EEEDFE;border-color:#AFA9EC}
-.ci{font-size:22px;margin-bottom:7px}
 .ct{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:2px}
 .cs{font-size:11px;color:#888;line-height:1.4}
 .badge{display:inline-block;font-size:9px;font-weight:600;padding:1px 7px;border-radius:6px;margin-top:5px}
@@ -87,13 +86,11 @@ body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:16px}
     <div class="xwrap"><div class="xfill" id="xfill" style="width:46%"></div></div>
     <div class="xlbl" id="xlbl">460 / 1000 XP</div>
   </div>
-
   <div class="daycard">
     <div class="dayt">Hoy</div>
     <div class="dayn" id="dayn"></div>
     <div class="days" id="days"></div>
   </div>
-
   <div class="slbl">Estadisticas <span id="ssync" class="serr">cargando...</span></div>
   <div class="sgrid">
     <div class="sg"><div class="sgv" id="gv-cuerpo" style="color:#1D9E75">--</div><div class="sgb"><div class="sgbf" id="gb-cuerpo" style="background:#1D9E75"></div></div><div class="sgn">Cuerpo</div></div>
@@ -102,7 +99,6 @@ body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:16px}
     <div class="sg"><div class="sgv" id="gv-creacion" style="color:#EF9F27">--</div><div class="sgb"><div class="sgbf" id="gb-creacion" style="background:#EF9F27"></div></div><div class="sgn">Creacion</div></div>
     <div class="sg"><div class="sgv" id="gv-recursos" style="color:#E24B4A">--</div><div class="sgb"><div class="sgbf" id="gb-recursos" style="background:#E24B4A"></div></div><div class="sgn">Recursos</div></div>
   </div>
-
   <div class="slbl">Misiones activas <span id="msync" class="serr">cargando...</span></div>
   <div class="mpanel">
     <div class="mph"><div class="mpt">Hoy</div><div class="mpx" id="xptoday">0 XP</div></div>
@@ -138,168 +134,169 @@ body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:16px}
       <button class="badd" onclick="addMission()">+ Agregar mision</button>
     </div>
   </div>
-
   <div class="slbl">Modulos</div>
   <div class="grid">
     <a class="card" href="banco_misiones_real.html">
-      <div class="ci">&#9876;</div>
-      <div class="ct">Banco de misiones</div>
+      <div class="ct">&#9876; Banco de misiones</div>
       <div class="cs">68 misiones en 11 categorias</div>
-      <span class="badge by">activa/desactiva desde Sheets</span>
+      <span class="badge by">activa desde Sheets</span>
     </a>
     <div class="card accent wide">
       <div class="ct" style="color:#26215C">&#128202; Google Sheets conectado</div>
       <div class="cs" style="color:#534AB7">Edita tu planilla y la app se actualiza sola</div>
     </div>
   </div>
-
   <div class="slbl">Zonas criticas</div>
   <div class="grid">
-    <div class="card critical"><div class="ct">&#128137; Salud</div><div class="cs">8 evaluaciones pendientes</div><span class="badge ba">25 pts</span></div>
-    <div class="card critical"><div class="ct">&#128176; Economia</div><div class="cs">Modo emergencia</div><span class="badge ba">20 pts</span></div>
-    <div class="card critical wide"><div class="ct">&#128156; Sexoafectivo</div><div class="cs">Terapia como mision central</div><span class="badge ba">22 pts</span></div>
+    <div class="card critical"><div class="ct">Salud</div><div class="cs">8 evaluaciones pendientes</div><span class="badge ba">25 pts</span></div>
+    <div class="card critical"><div class="ct">Economia</div><div class="cs">Modo emergencia</div><span class="badge ba">20 pts</span></div>
+    <div class="card critical wide"><div class="ct">Sexoafectivo</div><div class="cs">Terapia como mision central</div><span class="badge ba">22 pts</span></div>
   </div>
   <div class="footer">dixipixie8 Sistema pokemonistico de gestion personal</div>
 </div>
 <div class="notif" id="notif"></div>
 <script>
-var API = 'https://script.google.com/macros/s/AKfycbxD6ySR5Wqjzne5sFnk11vqsPjr3sj6STG7X2MCGxQx8g6QcuaCmddpc9uTjnAzVKE/exec';
 
+var API = 'https://script.google.com/macros/s/AKfycbxD6ySR5Wqjzne5sFnk11vqsPjr3sj6STG7X2MCGxQx8g6QcuaCmddpc9uTjnAzVKE/exec';
 var CAT_COLORS = {dis_fis:'#1D9E75',salud:'#1D9E75',dis_int:'#7F77DD',trabajo:'#7F77DD',politica:'#7F77DD',familia:'#D4537E',amigos:'#D4537E',sexoafect:'#D4537E',juego:'#EF9F27',arte:'#EF9F27',economia:'#E24B4A'};
 var CAT_NAMES = {dis_fis:'Dis. fisica',salud:'Salud',dis_int:'Dis. intelectual',trabajo:'Trabajo',politica:'Politica',familia:'Familia',amigos:'Amigos',sexoafect:'Sexoafectivo',juego:'Juego',arte:'Arte',economia:'Economia'};
 var missions = [];
 var totalXP = parseInt(localStorage.getItem('totalXP') || '460');
+function todayKey(){ return new Date().toISOString().split('T')[0]; }
+var done = new Set(JSON.parse(localStorage.getItem('done_'+todayKey()) || '[]'));
 
-function todayKey() { return new Date().toISOString().split('T')[0]; }
-var done = new Set(JSON.parse(localStorage.getItem('done_' + todayKey()) || '[]'));
-
-function loadStats() {
-  fetch(API + '?sheet=stats')
+function loadStats(){
+  fetch(API+'?sheet=stats')
     .then(function(r){ return r.json(); })
     .then(function(j){
-      var s = {};
-      j.data.forEach(function(row){ s[row.categoria] = parseInt(row.score) || 0; });
-      var groups = {
-        cuerpo:   Math.round(([s.dis_fis||0, s.salud||0].reduce(function(a,b){return a+b;},0)) / 2),
-        mente:    Math.round(([s.dis_int||0, s.trabajo||0, s.politica||0].reduce(function(a,b){return a+b;},0)) / 3),
-        vinculo:  Math.round(([s.familia||0, s.amigos||0, s.sexoafect||0].reduce(function(a,b){return a+b;},0)) / 3),
-        creacion: Math.round(([s.juego||0, s.arte||0].reduce(function(a,b){return a+b;},0)) / 2),
-        recursos: s.economia || 0
+      var s={};
+      j.data.forEach(function(row){ s[row.categoria]=parseInt(row.score)||0; });
+      var groups={
+        cuerpo:  Math.round((s.dis_fis||0+s.salud||0)/2),
+        mente:   Math.round(((s.dis_int||0)+(s.trabajo||0)+(s.politica||0))/3),
+        vinculo: Math.round(((s.familia||0)+(s.amigos||0)+(s.sexoafect||0))/3),
+        creacion:Math.round(((s.juego||0)+(s.arte||0))/2),
+        recursos:s.economia||0
       };
       Object.keys(groups).forEach(function(g){
-        var v = groups[g];
-        var el = document.getElementById('gv-'+g);
-        var bar = document.getElementById('gb-'+g);
-        if(el) el.textContent = v;
-        if(bar) bar.style.width = v + '%';
+        var v=groups[g];
+        var el=document.getElementById('gv-'+g);
+        var bar=document.getElementById('gb-'+g);
+        if(el) el.textContent=v;
+        if(bar) bar.style.width=v+'%';
       });
-      var sync = document.getElementById('ssync');
-      sync.className = 'sok'; sync.textContent = 'sincronizado';
+      var sync=document.getElementById('ssync');
+      sync.className='sok'; sync.textContent='sincronizado';
     })
     .catch(function(){
-      var sync = document.getElementById('ssync');
-      sync.className = 'serr'; sync.textContent = 'sin conexion';
+      var sync=document.getElementById('ssync');
+      sync.className='serr'; sync.textContent='sin conexion';
     });
 }
 
-function loadMissions() {
-  fetch(API + '?sheet=misiones')
+function loadMissions(){
+  fetch(API+'?sheet=misiones')
     .then(function(r){ return r.json(); })
     .then(function(j){
-      var local = JSON.parse(localStorage.getItem('local_missions') || '[]');
-      missions = j.data
-        .filter(function(m){ return m.activa && m.activa.toString().toLowerCase() === 'si'; })
-        .map(function(m){ return {id: m.id.toString(), categoria: m.categoria, titulo: m.titulo, tipo: m.tipo, xp: parseInt(m.xp)||10}; })
-        .concat(local);
-      var msync = document.getElementById('msync');
-      msync.className = 'sok'; msync.textContent = missions.length + ' misiones';
+      var local=JSON.parse(localStorage.getItem('local_missions')||'[]');
+      var remote=j.data.filter(function(m){ return m.activa && m.activa.toString().toLowerCase()==='si'; })
+        .map(function(m){ return {id:m.id.toString(),categoria:m.categoria,titulo:m.titulo,tipo:m.tipo,xp:parseInt(m.xp)||10}; });
+      missions=remote.concat(local);
+      var msync=document.getElementById('msync');
+      msync.className='sok'; msync.textContent=missions.length+' misiones';
       renderMissions();
     })
     .catch(function(){
-      var local = JSON.parse(localStorage.getItem('local_missions') || '[]');
-      missions = local;
-      var msync = document.getElementById('msync');
-      msync.className = 'serr'; msync.textContent = 'local (' + local.length + ')';
+      var local=JSON.parse(localStorage.getItem('local_missions')||'[]');
+      missions=local;
+      var msync=document.getElementById('msync');
+      msync.className='serr'; msync.textContent='local ('+local.length+')';
       renderMissions();
     });
 }
 
-function renderMissions() {
-  var list = document.getElementById('mlist');
+function renderMissions(){
+  var list=document.getElementById('mlist');
   if(!missions.length){
-    list.innerHTML = '<div class="loading">No hay misiones activas.<br>En tu Sheets cambia la columna activa a si.</div>';
+    list.innerHTML='<div class="loading">No hay misiones activas. En Sheets cambia activa a si.</div>';
     updateXPToday(); return;
   }
-  var html = '';
-  var shown = missions.slice(0,12);
-  shown.forEach(function(m){
-    var d = done.has(m.id.toString());
-    var col = CAT_COLORS[m.categoria] || '#888';
-    var nm = CAT_NAMES[m.categoria] || m.categoria;
-    html += '<div class="mrow" onclick="toggleM('' + m.id + '','' + m.titulo.replace(/'/g,"\'") + '',' + m.xp + ')">'
-      + '<div class="mdot" style="background:' + col + '"></div>'
-      + '<div class="mchk' + (d?' done':'') + '">' + (d?'&#10003;':'') + '</div>'
-      + '<div class="minf"><div class="mtit' + (d?' struck':'') + '">' + m.titulo + '</div>'
-      + '<div class="mcat">' + nm + ' &middot; ' + m.tipo + '</div></div>'
-      + '<div class="mxp">+' + m.xp + ' XP</div></div>';
+  list.innerHTML='';
+  missions.slice(0,12).forEach(function(m){
+    var d=done.has(m.id.toString());
+    var col=CAT_COLORS[m.categoria]||'#888';
+    var nm=CAT_NAMES[m.categoria]||m.categoria;
+    var row=document.createElement('div');
+    row.className='mrow';
+    row.dataset.id=m.id;
+    row.dataset.xp=m.xp;
+    row.innerHTML='<div class="mdot" style="background:'+col+'"></div>'
+      +'<div class="mchk'+(d?' done':'')+'">'+( d?'&#10003;':'')+'</div>'
+      +'<div class="minf"><div class="mtit'+(d?' struck':'')+'">'+m.titulo+'</div>'
+      +'<div class="mcat">'+nm+' &middot; '+m.tipo+'</div></div>'
+      +'<div class="mxp">+'+m.xp+' XP</div>';
+    row.addEventListener('click', function(){
+      toggleM(m.id, m.titulo, m.xp);
+    });
+    list.appendChild(row);
   });
-  list.innerHTML = html;
   updateXPToday();
 }
 
-function toggleM(id, titulo, xp) {
-  var sid = id.toString();
-  if(done.has(sid)){ done.delete(sid); totalXP -= xp; notify('Reactivada: ' + titulo); }
-  else { done.add(sid); totalXP += xp; notify('+' + xp + ' XP - ' + titulo); }
-  localStorage.setItem('done_' + todayKey(), JSON.stringify(Array.from(done)));
+function toggleM(id,titulo,xp){
+  var sid=id.toString();
+  if(done.has(sid)){ done.delete(sid); totalXP-=xp; notify('Reactivada: '+titulo); }
+  else { done.add(sid); totalXP+=xp; notify('+'+xp+' XP - '+titulo); }
+  localStorage.setItem('done_'+todayKey(), JSON.stringify(Array.from(done)));
   localStorage.setItem('totalXP', totalXP);
   updateXPGlobal(); renderMissions();
 }
 
-function updateXPToday() {
-  var xpH = missions.filter(function(m){ return done.has(m.id.toString()); }).reduce(function(a,m){ return a+m.xp; }, 0);
-  document.getElementById('xptoday').textContent = xpH + ' XP hoy';
+function updateXPToday(){
+  var xpH=missions.filter(function(m){ return done.has(m.id.toString()); }).reduce(function(a,m){ return a+m.xp; },0);
+  document.getElementById('xptoday').textContent=xpH+' XP hoy';
 }
 
-function updateXPGlobal() {
-  var pct = Math.min(100, Math.round((totalXP/1000)*100));
-  document.getElementById('xfill').style.width = pct + '%';
-  document.getElementById('xlbl').textContent = totalXP + ' / 1000 XP';
-  document.getElementById('lpill').textContent = 'Nivel ' + Math.floor(totalXP/100);
+function updateXPGlobal(){
+  var pct=Math.min(100,Math.round((totalXP/1000)*100));
+  document.getElementById('xfill').style.width=pct+'%';
+  document.getElementById('xlbl').textContent=totalXP+' / 1000 XP';
+  document.getElementById('lpill').textContent='Nivel '+Math.floor(totalXP/100);
 }
 
-function addMission() {
-  var title = document.getElementById('ntitle').value.trim();
+function addMission(){
+  var title=document.getElementById('ntitle').value.trim();
   if(!title){ notify('Escribe el nombre de la mision'); return; }
-  var m = {id:'local_'+Date.now(), categoria:document.getElementById('ncat').value, titulo:title, tipo:document.getElementById('ntipo').value, xp:parseInt(document.getElementById('nxp').value)};
-  var local = JSON.parse(localStorage.getItem('local_missions') || '[]');
+  var m={id:'local_'+Date.now(),categoria:document.getElementById('ncat').value,titulo:title,tipo:document.getElementById('ntipo').value,xp:parseInt(document.getElementById('nxp').value)};
+  var local=JSON.parse(localStorage.getItem('local_missions')||'[]');
   local.push(m); missions.unshift(m);
-  localStorage.setItem('local_missions', JSON.stringify(local));
-  document.getElementById('ntitle').value = '';
-  notify('Mision agregada localmente');
+  localStorage.setItem('local_missions',JSON.stringify(local));
+  document.getElementById('ntitle').value='';
+  notify('Mision agregada');
   renderMissions();
 }
 
-function notify(msg) {
-  var n = document.getElementById('notif');
-  n.textContent = msg; n.classList.add('show');
-  setTimeout(function(){ n.classList.remove('show'); }, 2500);
+function notify(msg){
+  var n=document.getElementById('notif');
+  n.textContent=msg; n.classList.add('show');
+  setTimeout(function(){ n.classList.remove('show'); },2500);
 }
 
-var DAYS = ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'];
-var MONTHS = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-var now = new Date();
-document.getElementById('dayn').textContent = DAYS[now.getDay()] + ', ' + now.getDate() + ' de ' + MONTHS[now.getMonth()];
-var h = now.getHours();
-document.getElementById('days').textContent = (h<12?'Buenos dias':h<19?'Buenas tardes':'Buenas noches') + ' - cual es el boss del dia?';
+var DAYS=['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'];
+var MONTHS=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+var now=new Date();
+document.getElementById('dayn').textContent=DAYS[now.getDay()]+', '+now.getDate()+' de '+MONTHS[now.getMonth()];
+var h=now.getHours();
+document.getElementById('days').textContent=(h<12?'Buenos dias':h<19?'Buenas tardes':'Buenas noches')+' - cual es el boss del dia?';
 
 updateXPGlobal();
 loadStats();
 loadMissions();
+
 </script>
 <script>
 if('serviceWorker' in navigator){
-  window.addEventListener('load', function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
+  window.addEventListener('load',function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
 }
 </script>
 </body>
