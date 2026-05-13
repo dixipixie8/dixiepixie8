@@ -183,54 +183,58 @@ var totalXP = parseInt(localStorage.getItem('totalXP') || '460');
 function todayKey(){ return new Date().toISOString().split('T')[0]; }
 var done = new Set(JSON.parse(localStorage.getItem('done_'+todayKey()) || '[]'));
 
+function jsonp(url, cb) {
+  var name = 'cb_' + Date.now();
+  window[name] = function(data) {
+    delete window[name];
+    document.head.removeChild(script);
+    cb(data);
+  };
+  var script = document.createElement('script');
+  script.src = url + '&callback=' + name;
+  script.onerror = function() {
+    delete window[name];
+    document.head.removeChild(script);
+    cb(null);
+  };
+  document.head.appendChild(script);
+}
+
 function loadStats(){
-  fetch(API+'?sheet=stats')
-    .then(function(r){ return r.json(); })
-    .then(function(j){
-      var s={};
-      j.data.forEach(function(row){ s[row.categoria]=parseInt(row.score)||0; });
-      var groups={
-        cuerpo:  Math.round(((s.dis_fis||0)+(s.salud||0))/2),
-        mente:   Math.round(((s.dis_int||0)+(s.trabajo||0)+(s.politica||0))/3),
-        vinculo: Math.round(((s.familia||0)+(s.amigos||0)+(s.sexoafect||0))/3),
-        creacion:Math.round(((s.juego||0)+(s.arte||0))/2),
-        recursos:s.economia||0
-      };
-      Object.keys(groups).forEach(function(g){
-        var v=groups[g];
-        var el=document.getElementById('gv-'+g);
-        var bar=document.getElementById('gb-'+g);
-        if(el) el.textContent=v;
-        if(bar) bar.style.width=v+'%';
-      });
-      var sync=document.getElementById('ssync');
-      sync.className='sok'; sync.textContent='sincronizado';
-    })
-    .catch(function(){
-      var sync=document.getElementById('ssync');
-      sync.className='serr'; sync.textContent='sin conexion';
+  jsonp(API+'?sheet=stats', function(j){
+    if(!j){ var sync=document.getElementById('ssync'); sync.className='serr'; sync.textContent='sin conexion'; return; }
+    var s={};
+    j.data.forEach(function(row){ s[row.categoria]=parseInt(row.score)||0; });
+    var groups={
+      cuerpo:  Math.round(((s.dis_fis||0)+(s.salud||0))/2),
+      mente:   Math.round(((s.dis_int||0)+(s.trabajo||0)+(s.politica||0))/3),
+      vinculo: Math.round(((s.familia||0)+(s.amigos||0)+(s.sexoafect||0))/3),
+      creacion:Math.round(((s.juego||0)+(s.arte||0))/2),
+      recursos:s.economia||0
+    };
+    Object.keys(groups).forEach(function(g){
+      var v=groups[g];
+      var el=document.getElementById('gv-'+g);
+      var bar=document.getElementById('gb-'+g);
+      if(el) el.textContent=v;
+      if(bar) bar.style.width=v+'%';
     });
+    var sync=document.getElementById('ssync');
+    sync.className='sok'; sync.textContent='sincronizado';
+  });
 }
 
 function loadMissions(){
-  fetch(API+'?sheet=misiones')
-    .then(function(r){ return r.json(); })
-    .then(function(j){
-      var local=JSON.parse(localStorage.getItem('local_missions')||'[]');
-      var remote=j.data.filter(function(m){ return m.activa && m.activa.toString().toLowerCase()==='si'; })
-        .map(function(m){ return {id:m.id.toString(),categoria:m.categoria,titulo:m.titulo,tipo:m.tipo,xp:parseInt(m.xp)||10}; });
-      missions=remote.concat(local);
-      var msync=document.getElementById('msync');
-      msync.className='sok'; msync.textContent=missions.length+' misiones';
-      renderMissions();
-    })
-    .catch(function(){
-      var local=JSON.parse(localStorage.getItem('local_missions')||'[]');
-      missions=local;
-      var msync=document.getElementById('msync');
-      msync.className='serr'; msync.textContent='local ('+local.length+')';
-      renderMissions();
-    });
+  jsonp(API+'?sheet=misiones', function(j){
+    var local=JSON.parse(localStorage.getItem('local_missions')||'[]');
+    if(!j){ missions=local; var msync=document.getElementById('msync'); msync.className='serr'; msync.textContent='local ('+local.length+')'; renderMissions(); return; }
+    var remote=j.data.filter(function(m){ return m.activa && m.activa.toString().toLowerCase()==='si'; })
+      .map(function(m){ return {id:m.id.toString(),categoria:m.categoria,titulo:m.titulo,tipo:m.tipo,xp:parseInt(m.xp)||10}; });
+    missions=remote.concat(local);
+    var msync=document.getElementById('msync');
+    msync.className='sok'; msync.textContent=missions.length+' misiones';
+    renderMissions();
+  });
 }
 
 function renderMissions(){
