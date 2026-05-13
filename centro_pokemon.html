@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Centro Pokemon — dixipixie8</title>
+<meta name="theme-color" content="#7F77DD">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:16px}
+.wrap{max-width:480px;margin:0 auto}
+.topbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.back{text-decoration:none;font-size:20px;color:#7F77DD}
+.topbar-info{flex:1}
+.topbar-title{font-size:17px;font-weight:600;color:#1a1a1a}
+.topbar-sub{font-size:11px;color:#888;margin-top:1px}
+.nurse{background:#fff;border-radius:12px;border:0.5px solid #e0e0e0;padding:14px 16px;margin-bottom:12px;display:flex;align-items:center;gap:12px}
+.nurse-ico{width:44px;height:44px;border-radius:50%;background:#FBEAF0;border:1.5px solid #ED93B1;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.nurse-txt .nt{font-size:14px;font-weight:500;color:#1a1a1a}
+.nurse-txt .ns{font-size:11px;color:#888;margin-top:2px;line-height:1.4}
+.phase-nav{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+.pnav{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:1.5px solid #e0e0e0;background:transparent;color:#888;transition:all 0.15s;white-space:nowrap}
+.pnav.active{background:#7F77DD;border-color:#7F77DD;color:white}
+.pnav.done{border-color:#1D9E75;color:#085041;background:#E1F5EE}
+.phase-panel{background:#fff;border-radius:12px;border:0.5px solid #e0e0e0;padding:16px;margin-bottom:10px}
+.phase-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.phase-icon{font-size:22px}
+.phase-title{font-size:15px;font-weight:600;color:#1a1a1a}
+.phase-sub{font-size:11px;color:#888;margin-top:1px}
+.prompt{border-left:2.5px solid #7F77DD;padding:10px 13px;background:#f5f4f0;border-radius:0 8px 8px 0;margin-bottom:10px}
+.prompt-q{font-size:12px;color:#888;margin-bottom:6px;line-height:1.5}
+.prompt-input{width:100%;padding:8px 10px;border-radius:8px;border:0.5px solid #ddd;background:#fff;color:#1a1a1a;font-size:12px;resize:none;min-height:52px;font-family:sans-serif;line-height:1.5}
+.prompt-input:focus{outline:none;border-color:#7F77DD}
+.insight{border-left:2.5px solid #EF9F27;padding:10px 13px;background:#FAEEDA;border-radius:0 8px 8px 0;font-size:12px;color:#412402;line-height:1.6;margin-bottom:10px}
+.btn-next{width:100%;padding:10px;border-radius:8px;background:#7F77DD;color:white;border:none;font-size:13px;font-weight:500;cursor:pointer;margin-top:4px}
+.btn-next:hover{opacity:0.88}
+.xp-preview{background:#EEEDFE;border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+.xp-big{font-size:28px;font-weight:600;color:#3C3489}
+.xp-desc{font-size:12px;color:#534AB7;line-height:1.5}
+.celeb{text-align:center;padding:16px}
+.celeb-ico{font-size:44px;margin-bottom:8px}
+.celeb-title{font-size:17px;font-weight:600;color:#1a1a1a;margin-bottom:4px}
+.celeb-sub{font-size:12px;color:#888}
+.summary-card{background:#f5f4f0;border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.srow{display:flex;justify-content:space-between;padding:5px 0;border-bottom:0.5px solid #e0e0e0;font-size:12px}
+.srow:last-child{border-bottom:none}
+.skey{color:#888}
+.sval{color:#1a1a1a;font-weight:500}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">&#8592;</a>
+    <div class="topbar-info">
+      <div class="topbar-title">Centro Pokemon &#127973;</div>
+      <div class="topbar-sub">Revision semanal - 6 fases - 20 a 30 min</div>
+    </div>
+  </div>
+
+  <div class="nurse">
+    <div class="nurse-ico">&#127973;</div>
+    <div class="nurse-txt">
+      <div class="nt">Bienvenido al Centro Pokemon</div>
+      <div class="ns">Sesion semanal de curacion y planificacion.<br>Mejor dia: domingo por la noche.</div>
+    </div>
+  </div>
+
+  <div class="phase-nav" id="phase-nav">
+    <button class="pnav active" onclick="goPhase(0,this)">1 Curacion</button>
+    <button class="pnav" onclick="goPhase(1,this)">2 Diagnostico</button>
+    <button class="pnav" onclick="goPhase(2,this)">3 Misiones</button>
+    <button class="pnav" onclick="goPhase(3,this)">4 Mapa</button>
+    <button class="pnav" onclick="goPhase(4,this)">5 Destilacion</button>
+    <button class="pnav" onclick="goPhase(5,this)">6 Cierre</button>
+  </div>
+
+  <div id="phase-container"></div>
+</div>
+
+<script>
+var currentPhase=0, donePh=[];
+
+var PHASES=[
+  {icon:'&#128138;',title:'Curacion',sub:'Resetea el estado antes de revisar',
+   content:function(){return '<div class="prompt"><div class="prompt-q">Como llegaste a esta semana? (una palabra o frase)</div><textarea class="prompt-input" id="p0_mood" placeholder="agotado, disperso, con energia..."></textarea></div>'
+    +'<div class="prompt"><div class="prompt-q">Que cosa inesperada te comio tiempo o energia esta semana?</div><textarea class="prompt-input" id="p0_drain" placeholder="algo que no planeaste..."></textarea></div>'
+    +'<div class="prompt"><div class="prompt-q">Una cosa que si salio bien, aunque sea chica</div><textarea class="prompt-input" id="p0_win" placeholder="cualquier victoria cuenta..."></textarea></div>'
+    +'<div class="insight">No se puede planificar desde la culpa. Primero reconoces donde estas, despues decides adonde vas.</div>';}
+  },
+  {icon:'&#128202;',title:'Diagnostico',sub:'Ajusta tus estadisticas de la semana',
+   content:function(){
+    var cats=[
+      {id:'dis_fis',n:'Dis. fisica',c:'#1D9E75'},{id:'salud',n:'Salud',c:'#1D9E75'},
+      {id:'dis_int',n:'Dis. intelectual',c:'#7F77DD'},{id:'trabajo',n:'Trabajo',c:'#7F77DD'},
+      {id:'politica',n:'Politica',c:'#7F77DD'},{id:'familia',n:'Familia',c:'#D4537E'},
+      {id:'amigos',n:'Amigos',c:'#D4537E'},{id:'sexoafect',n:'Sexoafectivo',c:'#D4537E'},
+      {id:'juego',n:'Juego',c:'#EF9F27'},{id:'arte',n:'Arte',c:'#EF9F27'},
+      {id:'economia',n:'Economia',c:'#E24B4A'}
+    ];
+    var html='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">';
+    cats.forEach(function(c){
+      var score=parseInt(localStorage.getItem('score_'+c.id)||'50');
+      html+='<div style="background:#f5f4f0;border-radius:8px;padding:8px 10px">'
+        +'<div style="font-size:11px;color:#888;margin-bottom:3px">'+c.n+'</div>'
+        +'<div style="display:flex;align-items:center;gap:6px">'
+        +'<button onclick="adjScore(\''+c.id+'\',\''+c.c+'\',-5)" style="padding:2px 8px;border-radius:5px;border:0.5px solid #ddd;background:transparent;cursor:pointer;font-size:11px">-5</button>'
+        +'<div style="flex:1;text-align:center;font-size:14px;font-weight:600;color:'+c.c+'" id="sv_'+c.id+'">'+score+'</div>'
+        +'<button onclick="adjScore(\''+c.id+'\',\''+c.c+'\',+5)" style="padding:2px 8px;border-radius:5px;border:0.5px solid #1D9E75;background:transparent;cursor:pointer;font-size:11px;color:#085041">+5</button>'
+        +'</div>'
+        +'<div style="height:3px;background:#e0e0e0;border-radius:2px;margin-top:5px;overflow:hidden"><div id="sb_'+c.id+'" style="height:100%;background:'+c.c+';width:'+score+'%;border-radius:2px;transition:width 0.3s"></div></div>'
+        +'</div>';
+    });
+    html+='</div>';
+    html+='<div class="prompt"><div class="prompt-q">Que stat te preocupa mas y por que?</div><textarea class="prompt-input" id="p1_concern" placeholder="escribe aqui..."></textarea></div>';
+    return html;
+   }
+  },
+  {icon:'&#9876;',title:'Barrido de misiones',sub:'Que hiciste, que omitiste, que sueltas',
+   content:function(){
+    var missions=['Salsa y bachata','Sentadillas matutinas','Higiene del sueno','Leer 30 min','Bloque trabajo profundo','Visita familia','Comunicacion activa','Terapia sesion','Registro de gastos','Revision finanzas'];
+    var html='<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">';
+    missions.forEach(function(m,i){
+      html+='<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f5f4f0;border-radius:8px">'
+        +'<div style="flex:1;font-size:12px;color:#1a1a1a">'+m+'</div>'
+        +'<div style="display:flex;gap:4px">'
+        +'<button onclick="setSweep('+i+',\'ok\',this)" id="sw_ok_'+i+'" style="font-size:10px;padding:2px 7px;border-radius:5px;border:0.5px solid #ddd;background:transparent;cursor:pointer">fue</button>'
+        +'<button onclick="setSweep('+i+',\'skip\',this)" id="sw_sk_'+i+'" style="font-size:10px;padding:2px 7px;border-radius:5px;border:0.5px solid #ddd;background:transparent;cursor:pointer">salto</button>'
+        +'<button onclick="setSweep('+i+',\'drop\',this)" id="sw_dr_'+i+'" style="font-size:10px;padding:2px 7px;border-radius:5px;border:0.5px solid #ddd;background:transparent;cursor:pointer">soltar</button>'
+        +'</div></div>';
+    });
+    html+='</div>';
+    html+='<div class="prompt"><div class="prompt-q">Que mision nueva deberia existir la proxima semana?</div><textarea class="prompt-input" id="p2_new" placeholder="algo que no estaba en la lista..."></textarea></div>';
+    html+='<div class="insight">Soltar no es fracasar - es limpiar el inventario. 3 misiones activas rinden mas que 12 a medias.</div>';
+    return html;
+   }
+  },
+  {icon:'&#128506;',title:'Mapa de la semana',sub:'Una intencion por dia, no una lista imposible',
+   content:function(){
+    var days=['Lunes','Martes','Miercoles','Jueves','Viernes'];
+    var html='<div class="insight">Cada dia tiene UN objetivo principal y maximo 2 secundarios. Si hay mas, van a lista de espera.</div>';
+    html+='<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px">';
+    days.forEach(function(d){
+      html+='<div style="background:#f5f4f0;border-radius:8px;padding:10px 12px">'
+        +'<div style="font-size:10px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px">'+d+'</div>'
+        +'<input style="width:100%;padding:6px 8px;border-radius:6px;border:0.5px solid #ddd;background:#fff;font-size:12px;margin-bottom:4px;font-family:sans-serif" placeholder="boss del dia..." id="boss_'+d+'"/>'
+        +'<input style="width:100%;padding:6px 8px;border-radius:6px;border:0.5px solid #ddd;background:#fff;font-size:12px;font-family:sans-serif" placeholder="secundaria..." id="sec_'+d+'"/>'
+        +'</div>';
+    });
+    html+='</div>';
+    html+='<div class="prompt"><div class="prompt-q">Que cosa NO haras esta semana?</div><textarea class="prompt-input" id="p3_notdo" placeholder="delegar, posponer conscientemente, o soltar..."></textarea></div>';
+    return html;
+   }
+  },
+  {icon:'&#9879;',title:'Destilacion',sub:'Los pensamientos alocados se vuelven accion',
+   content:function(){return '<div class="insight">Esta fase convierte el ruido mental en senal. No es planificacion - es descarga. Escribe sin editar.</div>'
+    +'<div class="prompt"><div class="prompt-q">Que idea o deseo lleva semanas dando vueltas sin convertirse en nada?</div><textarea class="prompt-input" id="p4_loop" placeholder="el pensamiento que aparece y desaparece..." style="min-height:64px"></textarea></div>'
+    +'<div class="prompt"><div class="prompt-q">Si tuvieras que convertir eso en UNA accion concreta esta semana, cual seria?</div><textarea class="prompt-input" id="p4_action" placeholder="no tiene que ser perfecta, solo concreta..."></textarea></div>'
+    +'<div class="prompt"><div class="prompt-q">Que papel pegado en tu pieza merece convertirse en mision real?</div><textarea class="prompt-input" id="p4_paper" placeholder="escribelo y dale tipo: diaria / semanal / quest..."></textarea></div>';}
+  },
+  {icon:'&#11088;',title:'Cierre',sub:'XP ganado - sesion sellada',
+   content:function(){
+    var xp=80+donePh.length*10;
+    return '<div class="celeb"><div class="celeb-ico">&#127942;</div><div class="celeb-title">Centro Pokemon completado</div><div class="celeb-sub">Sesion semanal sellada. Tu personaje ha sido curado.</div></div>'
+    +'<div class="xp-preview"><div class="xp-big">+'+xp+' XP</div><div class="xp-desc">ganado en esta sesion<br><span style="font-size:11px;opacity:0.8">solo por hacer la revision</span></div></div>'
+    +'<div class="summary-card">'
+    +'<div class="srow"><span class="skey">Fases completadas</span><span class="sval">'+donePh.length+'/6</span></div>'
+    +'<div class="srow"><span class="skey">Victoria de la semana</span><span class="sval" id="sum-win">-</span></div>'
+    +'<div class="srow"><span class="skey">Proxima sesion</span><span class="sval">Domingo por la noche</span></div>'
+    +'</div>'
+    +'<button class="btn-next" onclick="window.location.href=\'index.html\'">Volver al hub &#8594;</button>';
+   }
+  }
+];
+
+function adjScore(id,color,delta){
+  var el=document.getElementById('sv_'+id);
+  var bar=document.getElementById('sb_'+id);
+  if(!el) return;
+  var v=Math.max(0,Math.min(100,parseInt(el.textContent)+delta));
+  el.textContent=v; bar.style.width=v+'%';
+  localStorage.setItem('score_'+id,v);
+}
+
+function setSweep(i,result,btn){
+  ['ok','sk','dr'].forEach(function(r){
+    var b=document.getElementById('sw_'+r+'_'+i);
+    if(b){ b.style.background=''; b.style.color=''; b.style.borderColor=''; }
+  });
+  var colors={ok:{bg:'#E1F5EE',c:'#085041',bc:'#1D9E75'},skip:{bg:'#FAEEDA',c:'#412402',bc:'#EF9F27'},drop:{bg:'#FCEBEB',c:'#791F1F',bc:'#E24B4A'}};
+  var map={ok:'ok',skip:'sk',drop:'dr'};
+  var b=document.getElementById('sw_'+map[result]+'_'+i);
+  if(b && colors[result]){ b.style.background=colors[result].bg; b.style.color=colors[result].c; b.style.borderColor=colors[result].bc; }
+}
+
+function goPhase(n,btn){
+  currentPhase=n;
+  renderPhase();
+  document.querySelectorAll('.pnav').forEach(function(b,i){
+    b.classList.remove('active');
+    if(donePh.indexOf(i)>-1) b.classList.add('done');
+  });
+  btn.classList.remove('done');
+  btn.classList.add('active');
+}
+
+function nextPhase(){
+  if(donePh.indexOf(currentPhase)===-1) donePh.push(currentPhase);
+  var btns=document.querySelectorAll('.pnav');
+  btns[currentPhase].classList.remove('active');
+  btns[currentPhase].classList.add('done');
+  currentPhase=Math.min(5,currentPhase+1);
+  renderPhase();
+  btns[currentPhase].classList.remove('done');
+  btns[currentPhase].classList.add('active');
+  if(currentPhase===5){
+    setTimeout(function(){
+      var win=document.getElementById('p0_win');
+      var sumWin=document.getElementById('sum-win');
+      if(win && sumWin) sumWin.textContent=win.value||'-';
+      var xp=80+donePh.length*10;
+      var totalXP=parseInt(localStorage.getItem('totalXP')||'460')+xp;
+      localStorage.setItem('totalXP',totalXP);
+    },100);
+  }
+}
+
+function renderPhase(){
+  var p=PHASES[currentPhase];
+  var html='<div class="phase-panel">'
+    +'<div class="phase-header"><span class="phase-icon">'+p.icon+'</span><div><div class="phase-title">'+p.title+'</div><div class="phase-sub">'+p.sub+'</div></div></div>'
+    +p.content()
+    +(currentPhase<5?'<button class="btn-next" onclick="nextPhase()">Completar y continuar &#8594;</button>':'')
+    +'</div>';
+  document.getElementById('phase-container').innerHTML=html;
+}
+
+renderPhase();
+</script>
+</body>
+</html>
