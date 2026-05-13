@@ -7,7 +7,6 @@
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="dixipixie8">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#7F77DD">
@@ -15,66 +14,64 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:16px}
 .hub{max-width:480px;margin:0 auto}
-.header{text-align:center;padding:20px 0 16px}
-.avatar{width:64px;height:64px;border-radius:50%;background:#EEEDFE;border:2px solid #7F77DD;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#3C3489;margin:0 auto 10px;line-height:1.3;text-align:center}
+.header{text-align:center;padding:20px 0 14px}
+.avatar{width:64px;height:64px;border-radius:50%;background:#EEEDFE;border:2px solid #7F77DD;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#3C3489;margin:0 auto 10px;line-height:1.3}
 .name{font-size:20px;font-weight:600;color:#1a1a1a}
 .class{font-size:12px;color:#7F77DD;margin-top:2px}
 .level-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
 .pill{border-radius:20px;padding:3px 12px;font-size:12px;font-weight:500}
-.pill-purple{background:#EEEDFE;color:#3C3489}
-.pill-yellow{background:#FAEEDA;color:#412402}
-.xp-bar-wrap{background:#e0e0e0;border-radius:4px;height:5px;margin:10px 0 3px;overflow:hidden}
-.xp-bar-fill{height:100%;background:#7F77DD;border-radius:4px;transition:width 0.5s}
-.xp-label{font-size:11px;color:#888;text-align:center}
+.pp{background:#EEEDFE;color:#3C3489}
+.py{background:#FAEEDA;color:#412402}
+.xp-wrap{background:#e0e0e0;border-radius:4px;height:5px;margin:10px 0 3px;overflow:hidden}
+.xp-fill{height:100%;background:#7F77DD;border-radius:4px;transition:width 0.5s}
+.xp-lbl{font-size:11px;color:#888;text-align:center}
 .day-card{background:#7F77DD;border-radius:12px;padding:14px 16px;color:white;margin-bottom:10px}
-.day-title{font-size:10px;font-weight:600;opacity:0.8;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px}
-.day-name{font-size:17px;font-weight:600}
-.day-sub{font-size:11px;opacity:0.75;margin-top:2px}
-.section-label{font-size:10px;font-weight:600;color:#888;letter-spacing:0.08em;text-transform:uppercase;margin:14px 0 7px;display:flex;align-items:center;gap:8px}
-.sync-ok{font-size:10px;color:#1D9E75;font-weight:500}
-.sync-err{font-size:10px;color:#E24B4A;font-weight:500}
-.stats-mini{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:4px}
-.stat-m{background:#fff;border-radius:8px;padding:7px 4px;text-align:center;border:0.5px solid #e0e0e0}
-.stat-m-val{font-size:14px;font-weight:600}
-.stat-m-bar{height:3px;border-radius:2px;margin:3px auto 2px;width:80%;background:#eee;overflow:hidden}
-.stat-m-bar-fill{height:100%;border-radius:2px;transition:width 0.5s}
-.stat-m-name{font-size:9px;color:#888}
+.day-t{font-size:10px;font-weight:600;opacity:0.8;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:3px}
+.day-n{font-size:17px;font-weight:600}
+.day-s{font-size:11px;opacity:0.75;margin-top:2px}
+.slbl{font-size:10px;font-weight:600;color:#888;letter-spacing:0.08em;text-transform:uppercase;margin:14px 0 7px;display:flex;align-items:center;gap:8px}
+.sok{font-size:10px;color:#1D9E75;font-weight:500}
+.serr{font-size:10px;color:#E24B4A;font-weight:500}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:4px}
+.sg{background:#fff;border-radius:8px;padding:7px 4px;text-align:center;border:0.5px solid #e0e0e0}
+.sgv{font-size:14px;font-weight:600}
+.sgb{height:3px;border-radius:2px;margin:3px auto 2px;width:80%;background:#eee;overflow:hidden}
+.sgbf{height:100%;border-radius:2px;transition:width 0.5s}
+.sgn{font-size:9px;color:#888}
+.mpanel{background:#fff;border-radius:12px;border:0.5px solid #e0e0e0;padding:14px;margin-bottom:8px}
+.mph{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.mpt{font-size:13px;font-weight:600;color:#1a1a1a}
+.mpx{font-size:12px;color:#534AB7;font-weight:500}
+.mrow{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:0.5px solid #f0f0f0;cursor:pointer;user-select:none}
+.mrow:last-child{border-bottom:none}
+.mchk{width:20px;height:20px;border-radius:50%;border:1.5px solid #ccc;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all 0.2s}
+.mchk.done{background:#1D9E75;border-color:#1D9E75;color:white}
+.minf{flex:1;min-width:0}
+.mt{font-size:12px;font-weight:500;color:#1a1a1a;line-height:1.3}
+.mt.struck{text-decoration:line-through;color:#bbb}
+.mc{font-size:10px;color:#aaa;margin-top:1px}
+.mx{font-size:10px;color:#aaa;font-weight:500;flex-shrink:0}
+.mdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.add-form{background:#f5f4f0;border-radius:10px;padding:12px;margin-top:10px}
+.add-form input,.add-form select{width:100%;padding:7px 10px;border-radius:8px;border:0.5px solid #ddd;background:#fff;color:#1a1a1a;font-size:12px;margin-bottom:6px;font-family:sans-serif}
+.add-row{display:flex;gap:6px}
+.add-row select{flex:1;margin-bottom:0}
+.badd{width:100%;padding:9px;border-radius:8px;background:#7F77DD;color:white;border:none;font-size:13px;font-weight:500;cursor:pointer;margin-top:8px}
+.badd:hover{opacity:0.88}
+.loading{text-align:center;padding:16px;color:#888;font-size:12px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
 .card{background:#fff;border-radius:12px;border:0.5px solid #e0e0e0;padding:14px;cursor:pointer;transition:all 0.15s;text-decoration:none;display:block}
-.card:hover{border-color:#7F77DD;transform:translateY(-1px)}
 .card.wide{grid-column:1/-1}
 .card.critical{border-color:#E24B4A;border-width:1.5px}
 .card.accent{background:#EEEDFE;border-color:#AFA9EC}
-.card-icon{font-size:22px;margin-bottom:7px}
-.card-title{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:2px}
-.card-sub{font-size:11px;color:#888;line-height:1.4}
+.ci{font-size:22px;margin-bottom:7px}
+.ct{font-size:13px;font-weight:600;color:#1a1a1a;margin-bottom:2px}
+.cs{font-size:11px;color:#888;line-height:1.4}
 .badge{display:inline-block;font-size:9px;font-weight:600;padding:1px 7px;border-radius:6px;margin-top:5px}
 .bd{background:#EEEDFE;color:#3C3489}
 .bw{background:#E1F5EE;color:#085041}
 .ba{background:#FCEBEB;color:#791F1F}
 .by{background:#FAEEDA;color:#412402}
-.missions-panel{background:#fff;border-radius:12px;border:0.5px solid #e0e0e0;padding:14px;margin-bottom:8px}
-.mp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.mp-title{font-size:13px;font-weight:600;color:#1a1a1a}
-.mp-xp{font-size:12px;color:#534AB7;font-weight:500}
-.mission-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:0.5px solid #f0f0f0;cursor:pointer}
-.mission-row:last-child{border-bottom:none}
-.m-check{width:20px;height:20px;border-radius:50%;border:1.5px solid #ccc;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all 0.2s}
-.m-check.done{background:#1D9E75;border-color:#1D9E75;color:white}
-.m-info{flex:1;min-width:0}
-.m-title{font-size:12px;font-weight:500;color:#1a1a1a}
-.m-title.struck{text-decoration:line-through;color:#bbb}
-.m-cat{font-size:10px;color:#aaa;margin-top:1px}
-.m-xp{font-size:10px;color:#aaa;font-weight:500;flex-shrink:0}
-.m-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-.add-form{background:#f5f4f0;border-radius:10px;padding:12px;margin-top:10px}
-.add-form input,.add-form select{width:100%;padding:7px 10px;border-radius:8px;border:0.5px solid #ddd;background:#fff;color:#1a1a1a;font-size:12px;margin-bottom:6px;font-family:sans-serif}
-.add-row{display:flex;gap:6px}
-.add-row select{flex:1;margin-bottom:0}
-.btn-add{width:100%;padding:9px;border-radius:8px;background:#7F77DD;color:white;border:none;font-size:13px;font-weight:500;cursor:pointer;margin-top:8px}
-.btn-add:hover{opacity:0.88}
-.btn-add:disabled{opacity:0.4}
-.loading{text-align:center;padding:16px;color:#888;font-size:12px}
 .footer{text-align:center;margin-top:16px;padding-bottom:16px;font-size:10px;color:#ccc}
 .notif{position:fixed;bottom:16px;left:50%;transform:translateX(-50%) translateY(10px);background:#1D9E75;color:white;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:500;opacity:0;transition:all 0.3s;pointer-events:none;z-index:99;white-space:nowrap}
 .notif.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -87,39 +84,36 @@ body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:16px}
     <div class="name">dixipixie8</div>
     <div class="class">Polimata Disperso en evolucion</div>
     <div class="level-row">
-      <span class="pill pill-purple" id="level-pill">Nivel 8</span>
-      <span class="pill pill-yellow" id="streak-pill">3 dias</span>
+      <span class="pill pp" id="level-pill">Nivel 8</span>
+      <span class="pill py">3 dias seguidos</span>
     </div>
-    <div class="xp-bar-wrap"><div class="xp-bar-fill" id="xp-fill" style="width:46%"></div></div>
-    <div class="xp-label" id="xp-label">460 / 1000 XP</div>
+    <div class="xp-wrap"><div class="xp-fill" id="xp-fill" style="width:46%"></div></div>
+    <div class="xp-lbl" id="xp-lbl">460 / 1000 XP</div>
   </div>
 
   <div class="day-card">
-    <div class="day-title">Hoy</div>
-    <div class="day-name" id="day-name"></div>
-    <div class="day-sub" id="day-sub"></div>
+    <div class="day-t">Hoy</div>
+    <div class="day-n" id="day-n"></div>
+    <div class="day-s" id="day-s"></div>
   </div>
 
-  <div class="section-label">Estadisticas <span id="stats-sync"></span></div>
-  <div class="stats-mini" id="stats-mini">
-    <div class="stat-m"><div class="stat-m-val" style="color:#1D9E75" id="g-cuerpo">--</div><div class="stat-m-bar"><div class="stat-m-bar-fill" id="gb-cuerpo" style="background:#1D9E75"></div></div><div class="stat-m-name">Cuerpo</div></div>
-    <div class="stat-m"><div class="stat-m-val" style="color:#7F77DD" id="g-mente">--</div><div class="stat-m-bar"><div class="stat-m-bar-fill" id="gb-mente" style="background:#7F77DD"></div></div><div class="stat-m-name">Mente</div></div>
-    <div class="stat-m"><div class="stat-m-val" style="color:#D4537E" id="g-vinculo">--</div><div class="stat-m-bar"><div class="stat-m-bar-fill" id="gb-vinculo" style="background:#D4537E"></div></div><div class="stat-m-name">Vinculo</div></div>
-    <div class="stat-m"><div class="stat-m-val" style="color:#EF9F27" id="g-creacion">--</div><div class="stat-m-bar"><div class="stat-m-bar-fill" id="gb-creacion" style="background:#EF9F27"></div></div><div class="stat-m-name">Creacion</div></div>
-    <div class="stat-m"><div class="stat-m-val" style="color:#E24B4A" id="g-recursos">--</div><div class="stat-m-bar"><div class="stat-m-bar-fill" id="gb-recursos" style="background:#E24B4A"></div></div><div class="stat-m-name">Recursos</div></div>
+  <div class="slbl">Estadisticas <span id="ssync"></span></div>
+  <div class="stats">
+    <div class="sg"><div class="sgv" id="gv-cuerpo" style="color:#1D9E75">--</div><div class="sgb"><div class="sgbf" id="gb-cuerpo" style="background:#1D9E75"></div></div><div class="sgn">Cuerpo</div></div>
+    <div class="sg"><div class="sgv" id="gv-mente" style="color:#7F77DD">--</div><div class="sgb"><div class="sgbf" id="gb-mente" style="background:#7F77DD"></div></div><div class="sgn">Mente</div></div>
+    <div class="sg"><div class="sgv" id="gv-vinculo" style="color:#D4537E">--</div><div class="sgb"><div class="sgbf" id="gb-vinculo" style="background:#D4537E"></div></div><div class="sgn">Vinculo</div></div>
+    <div class="sg"><div class="sgv" id="gv-creacion" style="color:#EF9F27">--</div><div class="sgb"><div class="sgbf" id="gb-creacion" style="background:#EF9F27"></div></div><div class="sgn">Creacion</div></div>
+    <div class="sg"><div class="sgv" id="gv-recursos" style="color:#E24B4A">--</div><div class="sgb"><div class="sgbf" id="gb-recursos" style="background:#E24B4A"></div></div><div class="sgn">Recursos</div></div>
   </div>
 
-  <div class="section-label">Misiones activas <span id="missions-sync"></span></div>
-  <div class="missions-panel">
-    <div class="mp-header">
-      <div class="mp-title">Hoy</div>
-      <div class="mp-xp" id="xp-today">0 XP</div>
-    </div>
-    <div id="mission-list"><div class="loading">Cargando desde Sheets...</div></div>
+  <div class="slbl">Misiones activas <span id="msync"></span></div>
+  <div class="mpanel">
+    <div class="mph"><div class="mpt">Hoy</div><div class="mpx" id="xp-today">0 XP</div></div>
+    <div id="mlist"><div class="loading">Cargando...</div></div>
     <div class="add-form">
-      <input type="text" id="new-title" placeholder="Nueva mision..."/>
+      <input type="text" id="ntitle" placeholder="Nueva mision..."/>
       <div class="add-row">
-        <select id="new-cat">
+        <select id="ncat">
           <option value="dis_fis">Dis. fisica</option>
           <option value="salud">Salud</option>
           <option value="dis_int">Dis. intelectual</option>
@@ -132,46 +126,43 @@ body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:16px}
           <option value="arte">Arte</option>
           <option value="economia">Economia</option>
         </select>
-        <select id="new-tipo">
+        <select id="ntipo">
           <option value="daily">Diaria</option>
           <option value="weekly">Semanal</option>
           <option value="quest">Quest</option>
         </select>
-        <select id="new-xp">
+        <select id="nxp">
           <option value="10">+10 XP</option>
           <option value="20">+20 XP</option>
           <option value="30">+30 XP</option>
           <option value="50">+50 XP</option>
         </select>
       </div>
-      <button class="btn-add" id="btn-add" onclick="addMission()">+ Agregar mision</button>
+      <button class="badd" onclick="addMission()">+ Agregar mision</button>
     </div>
   </div>
 
-  <div class="section-label">Modulos</div>
+  <div class="slbl">Modulos</div>
   <div class="grid">
     <a class="card" href="banco_misiones_real.html">
-      <div class="card-icon">sword</div>
-      <div class="card-title">Banco de misiones</div>
-      <div class="card-sub">34 misiones reales</div>
-      <span class="badge by">11 categorias</span>
+      <div class="ci">sword</div>
+      <div class="ct">Banco de misiones</div>
+      <div class="cs">68 misiones en 11 categorias</div>
+      <span class="badge by">tus actividades reales</span>
     </a>
     <div class="card accent wide">
       <div style="display:flex;align-items:center;gap:10px">
         <div style="font-size:20px">sheets</div>
-        <div>
-          <div class="card-title" style="color:#26215C">Google Sheets conectado</div>
-          <div class="card-sub" style="color:#534AB7">Misiones y stats viven en tu planilla</div>
-        </div>
+        <div><div class="ct" style="color:#26215C">Google Sheets conectado</div><div class="cs" style="color:#534AB7">Misiones y stats en tu planilla</div></div>
       </div>
     </div>
   </div>
 
-  <div class="section-label">Zonas criticas</div>
+  <div class="slbl">Zonas criticas</div>
   <div class="grid">
-    <div class="card critical"><div class="card-icon">hospital</div><div class="card-title">Salud</div><div class="card-sub">8 evaluaciones pendientes</div><span class="badge ba">25 puntos</span></div>
-    <div class="card critical"><div class="card-icon">dinero</div><div class="card-title">Economia</div><div class="card-sub">Modo emergencia</div><span class="badge ba">20 puntos</span></div>
-    <div class="card critical wide"><div class="card-title">Sexoafectivo</div><div class="card-sub">Terapia como mision central</div><span class="badge ba">22 puntos</span></div>
+    <div class="card critical"><div class="ci">hospital</div><div class="ct">Salud</div><div class="cs">8 evaluaciones pendientes</div><span class="badge ba">25 pts</span></div>
+    <div class="card critical"><div class="ci">dinero</div><div class="ct">Economia</div><div class="cs">Modo emergencia</div><span class="badge ba">20 pts</span></div>
+    <div class="card critical wide"><div class="ct">Sexoafectivo</div><div class="cs">Terapia como mision central</div><span class="badge ba">22 pts</span></div>
   </div>
 
   <div class="footer">dixipixie8 Sistema pokemonistico de gestion personal</div>
@@ -180,157 +171,138 @@ body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:16px}
 
 <script>
 const API = 'https://script.google.com/macros/s/AKfycbxD6ySR5Wqjzne5sFnk11vqsPjr3sj6STG7X2MCGxQx8g6QcuaCmddpc9uTjnAzVKE/exec';
-
 const CAT_COLORS = {dis_fis:'#1D9E75',salud:'#1D9E75',dis_int:'#7F77DD',trabajo:'#7F77DD',politica:'#7F77DD',familia:'#D4537E',amigos:'#D4537E',sexoafect:'#D4537E',juego:'#EF9F27',arte:'#EF9F27',economia:'#E24B4A'};
 const CAT_NAMES = {dis_fis:'Dis. fisica',salud:'Salud',dis_int:'Dis. intelectual',trabajo:'Trabajo',politica:'Politica',familia:'Familia',amigos:'Amigos',sexoafect:'Sexoafectivo',juego:'Juego',arte:'Arte',economia:'Economia'};
 
 let missions = [];
-let doneMissions = new Set(JSON.parse(localStorage.getItem('done_' + today()) || '[]'));
 let totalXP = parseInt(localStorage.getItem('totalXP') || '460');
 
-function today(){ const d=new Date(); return d.toISOString().split('T')[0]; }
+function todayKey() { return new Date().toISOString().split('T')[0]; }
+let done = new Set(JSON.parse(localStorage.getItem('done_' + todayKey()) || '[]'));
 
-function parseCSV(text){
-  const rows = [];
-  const lines = text.trim().split('\n');
-  lines.forEach(line => {
-    const cols = []; let cur = '', inQ = false;
-    for(let i=0;i<line.length;i++){
-      const c=line[i];
-      if(c==='"'){inQ=!inQ;}
-      else if(c===','&&!inQ){cols.push(cur.trim());cur='';}
-      else{cur+=c;}
-    }
-    cols.push(cur.trim());
-    rows.push(cols);
-  });
-  return rows;
-}
-
-async function loadStats(){
+async function loadStats() {
   try {
     const r = await fetch(API + '?sheet=stats');
-    const json = await r.json();
-    const stats = {};
-    json.data.forEach(row => { if(row.categoria) stats[row.categoria] = parseInt(row.score)||0; });
+    const j = await r.json();
+    const s = {};
+    j.data.forEach(row => { s[row.categoria] = parseInt(row.score) || 0; });
     const groups = {
-      cuerpo: Math.round((['dis_fis','salud'].reduce((a,c)=>a+(stats[c]||0),0))/2),
-      mente:  Math.round((['dis_int','trabajo','politica'].reduce((a,c)=>a+(stats[c]||0),0))/3),
-      vinculo:Math.round((['familia','amigos','sexoafect'].reduce((a,c)=>a+(stats[c]||0),0))/3),
-      creacion:Math.round((['juego','arte'].reduce((a,c)=>a+(stats[c]||0),0))/2),
-      recursos:stats['economia']||0
+      cuerpo: Math.round((['dis_fis','salud'].reduce((a,c) => a+(s[c]||0), 0)) / 2),
+      mente:  Math.round((['dis_int','trabajo','politica'].reduce((a,c) => a+(s[c]||0), 0)) / 3),
+      vinculo:Math.round((['familia','amigos','sexoafect'].reduce((a,c) => a+(s[c]||0), 0)) / 3),
+      creacion:Math.round((['juego','arte'].reduce((a,c) => a+(s[c]||0), 0)) / 2),
+      recursos: s['economia'] || 0
     };
     Object.keys(groups).forEach(g => {
       const v = groups[g];
-      const el = document.getElementById('g-'+g);
-      const bar = document.getElementById('gb-'+g);
+      const el = document.getElementById('gv-' + g);
+      const bar = document.getElementById('gb-' + g);
       if(el) el.textContent = v;
       if(bar) bar.style.width = v + '%';
     });
-    document.getElementById('stats-sync').className = 'sync-ok';
-    document.getElementById('stats-sync').textContent = 'sincronizado';
+    const sync = document.getElementById('ssync');
+    sync.className = 'sok'; sync.textContent = 'sincronizado';
   } catch(e) {
-    document.getElementById('stats-sync').className = 'sync-err';
-    document.getElementById('stats-sync').textContent = 'sin conexion';
+    const sync = document.getElementById('ssync');
+    sync.className = 'serr'; sync.textContent = 'sin conexion';
   }
 }
 
-async function loadMissions(){
+async function loadMissions() {
+  const msync = document.getElementById('msync');
   try {
     const r = await fetch(API + '?sheet=misiones');
-    const json = await r.json();
+    const j = await r.json();
     const local = JSON.parse(localStorage.getItem('local_missions') || '[]');
     missions = [
-      ...json.data
-        .filter(row => row.activa && row.activa.toString().toLowerCase().includes('si'))
-        .map(row => ({id:row.id.toString(),categoria:row.categoria,titulo:row.titulo,tipo:row.tipo,xp:parseInt(row.xp)||10})),
+      ...j.data.filter(m => m.activa && m.activa.toString().toLowerCase() === 'si')
+               .map(m => ({id: m.id.toString(), categoria: m.categoria, titulo: m.titulo, tipo: m.tipo, xp: parseInt(m.xp)||10})),
       ...local
     ];
-    document.getElementById('missions-sync').className = 'sync-ok';
-    document.getElementById('missions-sync').textContent = missions.length + ' misiones';
+    msync.className = 'sok';
+    msync.textContent = missions.length + ' misiones';
   } catch(e) {
     const local = JSON.parse(localStorage.getItem('local_missions') || '[]');
     missions = local;
-    document.getElementById('missions-sync').className = 'sync-err';
-    document.getElementById('missions-sync').textContent = 'sin conexion - modo local';
+    msync.className = 'serr';
+    msync.textContent = 'local (' + local.length + ')';
   }
   renderMissions();
 }
 
-function renderMissions(){
-  const list = document.getElementById('mission-list');
-  if(missions.length === 0){
-    list.innerHTML = '<div class="loading">Agrega misiones en tu Sheets con activa=si, o usa el formulario de abajo.</div>';
+function renderMissions() {
+  const list = document.getElementById('mlist');
+  if(!missions.length) {
+    list.innerHTML = '<div class="loading">No hay misiones activas.<br>Cambia activa a si en tu Sheets.</div>';
     updateXPToday(); return;
   }
-  list.innerHTML = missions.slice(0,10).map(m => {
-    const done = doneMissions.has(m.id);
-    const color = CAT_COLORS[m.categoria] || '#888';
-    return '<div class="mission-row" onclick="toggleMission('' + m.id + '','' + m.titulo.replace(/'/g,"\'") + '',' + m.xp + ')">' +
-      '<div class="m-dot" style="background:' + color + '"></div>' +
-      '<div class="m-check' + (done?' done':'') + '">' + (done?'v':'') + '</div>' +
-      '<div class="m-info"><div class="m-title' + (done?' struck':'') + '">' + m.titulo + '</div>' +
-      '<div class="m-cat">' + (CAT_NAMES[m.categoria]||m.categoria) + ' - ' + m.tipo + '</div></div>' +
-      '<div class="m-xp">+' + m.xp + ' XP</div></div>';
+  list.innerHTML = missions.slice(0,12).map(m => {
+    const d = done.has(m.id.toString());
+    const col = CAT_COLORS[m.categoria] || '#888';
+    const nm = CAT_NAMES[m.categoria] || m.categoria;
+    return '<div class="mrow" onclick="toggleM('' + m.id + '','' + m.titulo.replace(/'/g,"\'") + '',' + m.xp + ')">'
+      + '<div class="mdot" style="background:' + col + '"></div>'
+      + '<div class="mchk' + (d?' done':'') + '">' + (d?'v':'') + '</div>'
+      + '<div class="minf"><div class="mt' + (d?' struck':'') + '">' + m.titulo + '</div>'
+      + '<div class="mc">' + nm + ' &middot; ' + m.tipo + '</div></div>'
+      + '<div class="mx">+' + m.xp + ' XP</div></div>';
   }).join('');
   updateXPToday();
 }
 
-function toggleMission(id, titulo, xp){
-  if(doneMissions.has(id)){ doneMissions.delete(id); totalXP -= xp; showNotif('Reactivada: ' + titulo); }
-  else { doneMissions.add(id); totalXP += xp; showNotif('+' + xp + ' XP - ' + titulo); }
-  localStorage.setItem('done_' + today(), JSON.stringify([...doneMissions]));
+function toggleM(id, titulo, xp) {
+  const sid = id.toString();
+  if(done.has(sid)) { done.delete(sid); totalXP -= xp; notify('Reactivada: ' + titulo); }
+  else { done.add(sid); totalXP += xp; notify('+' + xp + ' XP - ' + titulo); }
+  localStorage.setItem('done_' + todayKey(), JSON.stringify([...done]));
   localStorage.setItem('totalXP', totalXP);
   updateXPGlobal(); renderMissions();
 }
 
-function updateXPToday(){
-  const xpHoy = missions.filter(m=>doneMissions.has(m.id)).reduce((a,m)=>a+m.xp,0);
-  document.getElementById('xp-today').textContent = xpHoy + ' XP hoy';
+function updateXPToday() {
+  const xpH = missions.filter(m => done.has(m.id.toString())).reduce((a,m) => a+m.xp, 0);
+  document.getElementById('xp-today').textContent = xpH + ' XP hoy';
 }
 
-function updateXPGlobal(){
+function updateXPGlobal() {
   const pct = Math.min(100, Math.round((totalXP/1000)*100));
   document.getElementById('xp-fill').style.width = pct + '%';
-  document.getElementById('xp-label').textContent = totalXP + ' / 1000 XP';
+  document.getElementById('xp-lbl').textContent = totalXP + ' / 1000 XP';
   document.getElementById('level-pill').textContent = 'Nivel ' + Math.floor(totalXP/100);
 }
 
-function addMission(){
-  const title = document.getElementById('new-title').value.trim();
-  if(!title){ showNotif('Escribe el nombre de la mision'); return; }
-  const cat = document.getElementById('new-cat').value;
-  const tipo = document.getElementById('new-tipo').value;
-  const xp = parseInt(document.getElementById('new-xp').value);
-  const newM = {id:'local_'+Date.now(), categoria:cat, titulo:title, tipo:tipo, xp:xp};
+function addMission() {
+  const title = document.getElementById('ntitle').value.trim();
+  if(!title) { notify('Escribe el nombre de la mision'); return; }
+  const m = {id:'local_'+Date.now(), categoria:document.getElementById('ncat').value, titulo:title, tipo:document.getElementById('ntipo').value, xp:parseInt(document.getElementById('nxp').value)};
   const local = JSON.parse(localStorage.getItem('local_missions') || '[]');
-  local.push(newM); missions.unshift(newM);
+  local.push(m); missions.unshift(m);
   localStorage.setItem('local_missions', JSON.stringify(local));
-  document.getElementById('new-title').value = '';
-  showNotif('Mision agregada - recuerda anadirla en Sheets');
+  document.getElementById('ntitle').value = '';
+  notify('Mision agregada localmente');
   renderMissions();
 }
 
-function showNotif(msg){
+function notify(msg) {
   const n = document.getElementById('notif');
   n.textContent = msg; n.classList.add('show');
-  setTimeout(()=>n.classList.remove('show'), 2500);
+  setTimeout(() => n.classList.remove('show'), 2500);
 }
 
 const DAYS = ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'];
 const MONTHS = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 const now = new Date();
-document.getElementById('day-name').textContent = DAYS[now.getDay()] + ', ' + now.getDate() + ' de ' + MONTHS[now.getMonth()];
+document.getElementById('day-n').textContent = DAYS[now.getDay()] + ', ' + now.getDate() + ' de ' + MONTHS[now.getMonth()];
 const h = now.getHours();
-document.getElementById('day-sub').textContent = (h<12?'Buenos dias':h<19?'Buenas tardes':'Buenas noches') + ' - cual es el boss del dia?';
+document.getElementById('day-s').textContent = (h<12?'Buenos dias':h<19?'Buenas tardes':'Buenas noches') + ' - cual es el boss del dia?';
 
 updateXPGlobal();
 loadStats();
 loadMissions();
 </script>
 <script>
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(e=>console.log(e)));
+if('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
 </script>
 </body>
