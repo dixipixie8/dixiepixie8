@@ -201,7 +201,7 @@ function jsonp(url, cb) {
 }
 
 function loadStats(){
-  jsonp(API+'?sheet=stats', function(j){
+  jsonp(API+'?sheet=stat', function(j){
     if(!j){ var sync=document.getElementById('ssync'); sync.className='serr'; sync.textContent='sin conexion'; return; }
     var s={};
     j.data.forEach(function(row){ s[row.categoria]=parseInt(row.score)||0; });
