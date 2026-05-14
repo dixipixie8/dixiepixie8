@@ -192,7 +192,7 @@ body{font-family:sans-serif;background:#f5f4f0;min-height:100vh;padding:16px}
 <div class="notif" id="notif"></div>
 <script>
 
-var API = 'https://script.google.com/macros/s/AKfycbzC-25LUH06RpK0WJXqyh9Qs7jBVFjrpXWwjpd8wfVMsXOXJR47OgucO9XL55A9tDE/exec';
+var BASE = 'https://docs.google.com/spreadsheets/d/1YLw9QhLhoEIwdLG9qG9M7IHdEYwAUk_7ugl2cIAGlik/gviz/tq?tqx=out:csv&sheet=';
 var CAT_COLORS = {dis_fis:'#1D9E75',salud:'#1D9E75',dis_int:'#7F77DD',trabajo:'#7F77DD',politica:'#7F77DD',familia:'#D4537E',amigos:'#D4537E',sexoafect:'#D4537E',juego:'#EF9F27',arte:'#EF9F27',economia:'#E24B4A'};
 var CAT_NAMES = {dis_fis:'Dis. fisica',salud:'Salud',dis_int:'Dis. intelectual',trabajo:'Trabajo',politica:'Politica',familia:'Familia',amigos:'Amigos',sexoafect:'Sexoafectivo',juego:'Juego',arte:'Arte',economia:'Economia'};
 var missions = [];
@@ -201,60 +201,74 @@ var totalXP = parseInt(localStorage.getItem('totalXP') || '460');
 function todayKey(){ return new Date().toISOString().split('T')[0]; }
 var done = new Set(JSON.parse(localStorage.getItem('done_'+todayKey()) || '[]'));
 
-function callAPI(url, cb) {
-  var proxy = 'https://api.allorigins.win/get?url=' + encodeURIComponent(url);
-  fetch(proxy)
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      try {
-        var parsed = JSON.parse(data.contents);
-        cb(parsed);
-      } catch(e) {
-        console.error('Parse error:', e, data.contents);
-        cb(null);
-      }
-    })
-    .catch(function(e){
-      console.error('Proxy error:', e);
-      cb(null);
-    });
+function parseCSV(text){
+  var rows=[];
+  var lines=text.trim().split('\n');
+  lines.forEach(function(line){
+    var cols=[],cur='',inQ=false;
+    for(var i=0;i<line.length;i++){
+      var c=line[i];
+      if(c==='"'){inQ=!inQ;}
+      else if(c===','&&!inQ){cols.push(cur.trim().replace(/^"|"$/g,''));cur='';}
+      else{cur+=c;}
+    }
+    cols.push(cur.trim().replace(/^"|"$/g,''));
+    rows.push(cols);
+  });
+  return rows;
 }
 
 function loadStats(){
-  callAPI(API+'?sheet=stat', function(j){
-    if(!j){ var sync=document.getElementById('ssync'); sync.className='serr'; sync.textContent='sin conexion'; return; }
-    var s={};
-    j.data.forEach(function(row){ s[row.categoria]=parseInt(row.score)||0; });
-    var groups={
-      cuerpo:  Math.round(((s.dis_fis||0)+(s.salud||0))/2),
-      mente:   Math.round(((s.dis_int||0)+(s.trabajo||0)+(s.politica||0))/3),
-      vinculo: Math.round(((s.familia||0)+(s.amigos||0)+(s.sexoafect||0))/3),
-      creacion:Math.round(((s.juego||0)+(s.arte||0))/2),
-      recursos:s.economia||0
-    };
-    Object.keys(groups).forEach(function(g){
-      var v=groups[g];
-      var el=document.getElementById('gv-'+g);
-      var bar=document.getElementById('gb-'+g);
-      if(el) el.textContent=v;
-      if(bar) bar.style.width=v+'%';
+  fetch('https://docs.google.com/spreadsheets/d/1YLw9QhLhoEIwdLG9qG9M7IHdEYwAUk_7ugl2cIAGlik/gviz/tq?tqx=out:csv&sheet=stat')
+    .then(function(r){ return r.text(); })
+    .then(function(text){
+      var rows=parseCSV(text).slice(1);
+      var s={};
+      rows.forEach(function(row){ if(row[0]) s[row[0]]=parseInt(row[1])||0; });
+      var groups={
+        cuerpo:  Math.round(((s.dis_fis||0)+(s.salud||0))/2),
+        mente:   Math.round(((s.dis_int||0)+(s.trabajo||0)+(s.politica||0))/3),
+        vinculo: Math.round(((s.familia||0)+(s.amigos||0)+(s.sexoafect||0))/3),
+        creacion:Math.round(((s.juego||0)+(s.arte||0))/2),
+        recursos:s.economia||0
+      };
+      Object.keys(groups).forEach(function(g){
+        var v=groups[g];
+        var el=document.getElementById('gv-'+g);
+        var bar=document.getElementById('gb-'+g);
+        if(el) el.textContent=v;
+        if(bar) bar.style.width=v+'%';
+      });
+      var sync=document.getElementById('ssync');
+      sync.className='sok'; sync.textContent='sincronizado';
+    })
+    .catch(function(){
+      var sync=document.getElementById('ssync');
+      sync.className='serr'; sync.textContent='sin conexion';
     });
-    var sync=document.getElementById('ssync');
-    sync.className='sok'; sync.textContent='sincronizado';
-  });
 }
 
 function loadMissions(){
-  callAPI(API+'?sheet=misiones', function(j){
-    var local=JSON.parse(localStorage.getItem('local_missions')||'[]');
-    if(!j){ missions=local; var msync=document.getElementById('msync'); msync.className='serr'; msync.textContent='local ('+local.length+')'; renderMissions(); return; }
-    var remote=j.data.filter(function(m){ return m.activa && m.activa.toString().toLowerCase()==='si'; })
-      .map(function(m){ return {id:m.id.toString(),categoria:m.categoria,titulo:m.titulo,tipo:m.tipo,xp:parseInt(m.xp)||10}; });
-    missions=remote.concat(local);
-    var msync=document.getElementById('msync');
-    msync.className='sok'; msync.textContent=missions.length+' misiones';
-    renderMissions();
-  });
+  fetch('https://docs.google.com/spreadsheets/d/1YLw9QhLhoEIwdLG9qG9M7IHdEYwAUk_7ugl2cIAGlik/gviz/tq?tqx=out:csv&sheet=misiones')
+    .then(function(r){ return r.text(); })
+    .then(function(text){
+      var rows=parseCSV(text).slice(1);
+      var local=JSON.parse(localStorage.getItem('local_missions')||'[]');
+      var remote=rows
+        .filter(function(row){ return row[0] && row[6] && row[6].toLowerCase()==='si'; })
+        .map(function(row){ return {id:row[0],categoria:row[1],titulo:row[2],tipo:row[4],xp:parseInt(row[5])||10}; });
+      missions=remote.concat(local);
+      var msync=document.getElementById('msync');
+      msync.className='sok'; msync.textContent=missions.length+' misiones';
+      renderMissions();
+    })
+    .catch(function(){
+      var local=JSON.parse(localStorage.getItem('local_missions')||'[]');
+      missions=local;
+      var msync=document.getElementById('msync');
+      msync.className='serr'; msync.textContent='local ('+local.length+')';
+      renderMissions();
+    });
 }
 
 
